@@ -11,17 +11,19 @@
                                 <div class="widget-title am-fl">基本信息</div>
                             </div>
                             <div class="am-form-group">
-                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">商品名称 </label>
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">店铺名称 </label>
                                 <div class="am-u-sm-9 am-u-end">
+                                    <input type="text" class="tpl-form-input" name="shop[shop_id]"
+                                           value="<?= $model['shop_id'] ?>" required>
                                     <input type="text" class="tpl-form-input" name="shop[shop_name]"
                                            value="<?= $model['shop_name'] ?>" required>
                                 </div>
                             </div>
                             <div class="am-form-group">
-                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">商品分类 </label>
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">店铺分类 </label>
                                 <div class="am-u-sm-9 am-u-end">
-                                    <select name="goods[shop_cate_id]" required
-                                            data-am-selected="{searchBox: 1, btnSize: 'sm',  placeholder:'请选择商品分类'}">
+                                    <select name="shop[shop_cate_id]" required
+                                            data-am-selected="{searchBox: 1, btnSize: 'sm',  placeholder:'请选择店铺分类'}">
                                         <option value=""></option>
                                         <?php if (isset($catgory)): foreach ($catgory as $first): ?>
                                             <option value="<?= $first['category_id'] ?>"
@@ -45,7 +47,35 @@
                                 </div>
                             </div>
                             <div class="am-form-group">
-                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">商品图片 </label>
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">联系人 </label>
+                                <div class="am-u-sm-9 am-u-end">
+                                    <input type="text" class="tpl-form-input" name="shop[contacts]"
+                                           value="<?= $model['contacts'] ?>" required>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">联系方式 </label>
+                                <div class="am-u-sm-9 am-u-end">
+                                    <input type="text" class="tpl-form-input" name="shop[mobile]"
+                                           value="<?= $model['mobile'] ?>" required>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">基础设施 </label>
+                                <div class="am-u-sm-9 am-u-end">
+                                    <input type="text" class="tpl-form-input" name="shop[facilities]"
+                                           value="<?= $model['facilities'] ?>" required>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">营业时间 </label>
+                                <div class="am-u-sm-9 am-u-end">
+                                    <input type="text" class="tpl-form-input" name="shop[work_hour]"
+                                           value="<?= $model['work_hour'] ?>" required>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">店铺图片 </label>
                                 <div class="am-u-sm-9 am-u-end">
                                     <div class="am-form-file">
                                         <button type="button"
@@ -70,13 +100,11 @@
                             </div>
 
 
-
-
                             <div class="widget-head am-cf">
-                                <div class="widget-title am-fl">商品详情</div>
+                                <div class="widget-title am-fl">商家说明</div>
                             </div>
                             <div class="am-form-group">
-                                <label class="am-u-sm-3 am-u-lg-2 am-form-label">商品详情 </label>
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label">店铺详情 </label>
                                 <div class="am-u-sm-9 am-u-end">
                                     <!-- 加载编辑器的容器 -->
                                     <textarea id="container" name="shop[content]"><?= $model['content'] ?></textarea>
@@ -86,7 +114,7 @@
                                 <div class="widget-title am-fl">其他</div>
                             </div>
                             <div class="am-form-group">
-                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">商品状态 </label>
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">店铺状态 </label>
                                 <div class="am-u-sm-9 am-u-end">
                                     <label class="am-radio-inline">
                                         <input type="radio" name="shop[shop_status]" value="10" data-am-ucheck
@@ -101,7 +129,7 @@
                                 </div>
                             </div>
                             <div class="am-form-group">
-                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">商品排序 </label>
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">店铺排序 </label>
                                 <div class="am-u-sm-9 am-u-end">
                                     <input type="number" class="tpl-form-input" name="shop[shop_sort]"
                                            value="<?= $model['shop_sort'] ?>" required>
@@ -128,7 +156,7 @@
 <!-- 文件库弹窗 -->
 {{include file="layouts/_template/file_library" /}}
 
-<!-- 商品多规格模板 -->
+<!-- 店铺多规格模板 -->
 {{include file="goods/_template/spec_many" /}}
 
 <script src="assets/store/js/ddsort.js"></script>
@@ -176,7 +204,7 @@
                 var specType = $('input:radio[name="goods[spec_type]"]:checked').val();
                 if (specType === '20') {
                     var isEmpty = specMany.isEmptySkuList();
-                    isEmpty === true && layer.msg('商品规格不能为空');
+                    isEmpty === true && layer.msg('店铺规格不能为空');
                     return !isEmpty;
                 }
                 return true;

@@ -57,7 +57,7 @@ class Shop extends Model
         $category_id > 0 && $filter['shop_cate_id'] = $category_id;
         $status > 0 && $filter['shop_status'] = $status;
         !empty($search) && $filter['shop_name'] = ['like', '%' . trim($search) . '%'];
-
+        $filter['is_delete']=0;
         // 排序规则
         $sort = [];
         if ($sortType === 'all') {
@@ -72,5 +72,54 @@ class Shop extends Model
           ->field("s.*,sc.name")
           ->where($filter)->order($sort)->paginate(15);
 
+    }
+    /**
+     * 添加店铺
+     * @param array $data
+     * @return bool
+     */
+    public function edit(array $data)
+    {
+        if (!isset($data['images']) || empty($data['images'])) {
+            $this->error = '请上传店铺图片';
+            return false;
+        }
+        $data['content'] = isset($data['content']) ? $data['content'] : '';
+        $data['shop_image']=serialize($data['images']);
+        unset($data['images']);
+        echo'<pre>';
+
+        // 开启事务
+        Db::startTrans();
+        try {
+            // 添加店铺\
+            $this->where(['shop_id'=>$data['shop_id']])->update($data);
+            Db::commit();
+            return true;
+        } catch (\Exception $e) {
+            Db::rollback();
+        }
+        return false;
+    }
+    /**
+     * 删除店铺
+     * @return bool
+     */
+    public function remove($shop_id)
+    {
+        // 开启事务处理
+        Db::startTrans();
+        try {
+
+            // 删除当前商品
+            $this->where(['shop_id'=>$shop_id])->update(['is_delete'=>1]);
+            // 事务提交
+            Db::commit();
+            return true;
+        } catch (\Exception $e) {
+            $this->error = $e->getMessage();
+            Db::rollback();
+            return false;
+        }
     }
 }

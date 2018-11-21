@@ -2,6 +2,8 @@
 namespace app\store\controller;
 use app\store\model\Shop as ShopModel;
 use app\store\model\ShopCategory;
+use think\Db;
+
 class Shop extends Controller
 {
     /*
@@ -44,13 +46,12 @@ class Shop extends Controller
     {
         // 商品详情
         $model = ShopModel::get($shop_id);
-        if (!$this->request->isAjax()) {
+        if (!$this->request->isPost()) {
             // 商品分类
             $catgory = ShopCategory::getCacheTree();
             $image_ids=unserialize($model->shop_image);
             $where['file_id']=array('in',$image_ids);
             $files= db("upload_file")->where($where)->column("file_id,file_name");
-            var_dump($files);
            foreach($files as $k=> $file_name){
                $images[$k]['file_path'] =IMG_PATH.$file_name;
                $images[$k]['image_id'] =$k;
@@ -59,10 +60,27 @@ class Shop extends Controller
             return $this->fetch('edit', compact('model', 'catgory'));
         }
         // 更新记录
-        if ($model->edit($this->postData('goods'))) {
-            return $this->renderSuccess('更新成功', url('shop/index'));
+        $model = new ShopModel;
+        if ($model->edit($this->postData('shop'))) {
+
+            return $this->renderSuccess('添加成功', url('shop/index'));
         }
         $error = $model->getError() ?: '更新失败';
         return $this->renderError($error);
+    }
+
+    /**
+     * 删除商品
+     * @param $goods_id
+     * @return array
+     * @throws \think\exception\DbException
+     */
+    public function delete($shop_id)
+    {
+        $model = ShopModel::get($shop_id);
+        if (!$model->remove($shop_id)) {
+            return $this->renderError('删除失败');
+        }
+        return $this->renderSuccess('删除成功');
     }
 }
