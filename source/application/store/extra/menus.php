@@ -13,6 +13,31 @@ return [
         'icon' => 'icon-home',
         'index' => 'index/index',
     ],
+    'shop' => [
+        'name' => '店铺管理',
+        'icon' => 'icon-shop',
+        'index' => 'shop/index',
+        'submenu' => [
+            [
+                'name' => '店铺列表',
+                'index' => 'shop/index',
+                'uris' => [
+                    'shop/index',
+                    'shop/add',
+                    'shop/edit'
+                ],
+            ],
+            [
+                'name' => '店铺分类',
+                'index' => 'shop.category/index',
+                'uris' => [
+                    'shop.category/index',
+                    'shop.category/add',
+                    'shop.category/edit',
+                ],
+            ]
+        ],
+    ],
     'goods' => [
         'name' => '商品管理',
         'icon' => 'icon-goods',
