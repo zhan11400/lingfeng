@@ -21,7 +21,11 @@ class UploadGroup extends UploadGroupModel
      */
     public function getList($group_type = 'image')
     {
-        return $this->where(compact('group_type'))->order(['sort' => 'asc'])->select();
+        if(session('merchant_store')){
+            $where['shop_id']=session('merchant_store')['shop_id'];
+        }
+        $where['group_type']=$group_type;
+        return $this->where($where)->order(['sort' => 'asc'])->select();
     }
 
     /**
@@ -33,6 +37,10 @@ class UploadGroup extends UploadGroupModel
     {
         $data['wxapp_id'] = self::$wxapp_id;
         $data['sort'] = 100;
+        if(session('merchant_store')){
+            $data['shop_id']=session('merchant_store')['shop_id'];
+
+        }
         return $this->save($data);
     }
 

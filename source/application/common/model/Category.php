@@ -28,9 +28,15 @@ class Category extends BaseModel
      */
     public static function getALL()
     {
+        $shop_id=0;
+        if(session('merchant_store')){
+            $where['shop_id']=session('merchant_store')['shop_id'];
+            $shop_id=session('merchant_store')['shop_id'];
+        }
         $model = new static;
-        if (!Cache::get('category_' . $model::$wxapp_id)) {
-            $data = $model->with(['image'])->order(['sort' => 'asc'])->select();
+        if (!Cache::get('category_' . $model::$wxapp_id.$shop_id)) {
+                $where['shop_id'] = $shop_id;
+            $data = $model->where($where)->with(['image'])->order(['sort' => 'asc'])->select();
             $all = !empty($data) ? $data->toArray() : [];
             $tree = [];
             foreach ($all as $first) {
@@ -51,9 +57,9 @@ class Category extends BaseModel
                 }
                 $tree[$first['category_id']] = $first;
             }
-            Cache::set('category_' . $model::$wxapp_id, compact('all', 'tree'));
+            Cache::set('category_' . $model::$wxapp_id.$shop_id, compact('all', 'tree'));
         }
-        return Cache::get('category_' . $model::$wxapp_id);
+        return Cache::get('category_' . $model::$wxapp_id.$shop_id);
     }
 
     /**

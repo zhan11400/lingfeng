@@ -69,6 +69,7 @@
                                            value="" required>
                                 </div>
                             </div>
+
                             <div class="am-form-group">
                                 <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">店铺图片 </label>
                                 <div class="am-u-sm-9 am-u-end">
@@ -149,8 +150,6 @@
 <!-- 文件库弹窗 -->
 {{include file="layouts/_template/file_library" /}}
 
-<!-- 店铺多规格模板 -->
-{{include file="goods/_template/spec_many" /}}
 
 <script src="assets/store/js/ddsort.js"></script>
 <script src="assets/store/plugins/umeditor/umeditor.config.js"></script>
@@ -167,7 +166,10 @@
             name: 'shop[images][]'
             , multiple: true
         });
-
+        // 选择logo
+        $('.upload-file_logo').selectImages({
+            name: 'shop[shop_logo]'
+        });
         // 图片列表拖动
         $('.uploader-list').DDSort({
             target: '.file-item',
@@ -178,21 +180,6 @@
             }
         });
 
-        // 注册店铺多规格组件
-        var specMany = new GoodsSpec({
-            container: '.goods-spec-many'
-        });
-
-        // 切换单/多规格
-        $('input:radio[name="goods[spec_type]"]').change(function (e) {
-            var $goodsSpecMany = $('.goods-spec-many')
-                , $goodsSpecSingle = $('.goods-spec-single');
-            if (e.currentTarget.value === '10') {
-                $goodsSpecMany.hide() && $goodsSpecSingle.show();
-            } else {
-                $goodsSpecMany.show() && $goodsSpecSingle.hide();
-            }
-        });
 
         /**
          * 表单验证提交

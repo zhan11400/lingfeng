@@ -13,7 +13,7 @@
                             <div class="am-form-group">
                                 <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">店铺名称 </label>
                                 <div class="am-u-sm-9 am-u-end">
-                                    <input type="text" class="tpl-form-input" name="shop[shop_id]"
+                                    <input type="hidden" class="tpl-form-input" name="shop[shop_id]"
                                            value="<?= $model['shop_id'] ?>" required>
                                     <input type="text" class="tpl-form-input" name="shop[shop_name]"
                                            value="<?= $model['shop_name'] ?>" required>
@@ -42,7 +42,7 @@
                                         <?php endforeach; endif; ?>
                                     </select>
                                     <small class="am-margin-left-xs">
-                                        <a href="<?= url('goods.category/add') ?>">去添加</a>
+                                        <a href="<?= url('shop.category/add') ?>">去添加</a>
                                     </small>
                                 </div>
                             </div>
@@ -72,6 +72,30 @@
                                 <div class="am-u-sm-9 am-u-end">
                                     <input type="text" class="tpl-form-input" name="shop[work_hour]"
                                            value="<?= $model['work_hour'] ?>" required>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label">店铺logo </label>
+                                <div class="am-u-sm-9 am-u-end">
+                                    <div class="am-form-file">
+                                        <button type="button"
+                                                class="upload-file_logo am-btn am-btn-secondary am-radius">
+                                            <i class="am-icon-cloud-upload"></i> 选择图片
+                                        </button>
+                                        <div class="uploader-list am-cf">
+                                            <?php if ($model['shop_logo']): ?>
+                                                <div class="file-item">
+                                                    <img src="<?= $model['shop_logo'] ?>">
+                                                    <input type="hidden" name="shop[shop_logo]"
+                                                           value="<?= $model['shop_logo'] ?>">
+                                                    <i class="iconfont icon-shanchu file-item-delete"></i>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                    <div class="help-block am-margin-top-sm">
+                                        <small>尺寸150x150像素以上，大小2M以下</small>
+                                    </div>
                                 </div>
                             </div>
                             <div class="am-form-group">
@@ -118,12 +142,12 @@
                                 <div class="am-u-sm-9 am-u-end">
                                     <label class="am-radio-inline">
                                         <input type="radio" name="shop[shop_status]" value="10" data-am-ucheck
-                                            <?= $model['shop_status']['value'] == 10 ? 'checked' : '' ?> >
+                                            <?= $model['shop_status'] == 10 ? 'checked' : '' ?> >
                                         上架
                                     </label>
                                     <label class="am-radio-inline">
                                         <input type="radio" name="shop[shop_status]" value="20" data-am-ucheck
-                                            <?= $model['shop_status']['value'] == 20 ? 'checked' : '' ?> >
+                                            <?= $model['shop_status'] == 20 ? 'checked' : '' ?> >
                                         下架
                                     </label>
                                 </div>
@@ -156,8 +180,6 @@
 <!-- 文件库弹窗 -->
 {{include file="layouts/_template/file_library" /}}
 
-<!-- 店铺多规格模板 -->
-{{include file="goods/_template/spec_many" /}}
 
 <script src="assets/store/js/ddsort.js"></script>
 <script src="assets/store/plugins/umeditor/umeditor.config.js"></script>
@@ -171,10 +193,13 @@
 
         // 选择图片
         $('.upload-file').selectImages({
-            name: 'goods[images][]'
+            name: 'shop[images][]'
             , multiple: true
         });
-
+        // 选择logo
+        $('.upload-file_logo').selectImages({
+            name: 'shop[shop_logo]'
+        });
         // 图片列表拖动
         $('.uploader-list').DDSort({
             target: '.file-item',
@@ -194,7 +219,7 @@
             // form data
             buildData: function () {
                 return {
-                    goods: {
+                    shop: {
                         spec_many: specMany.getData()
                     }
                 };

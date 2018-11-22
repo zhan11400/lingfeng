@@ -40,7 +40,11 @@ class Delivery extends BaseModel
     public static function getAll()
     {
         $model = new static;
-        return $model->order(['sort' => 'asc'])->select();
+        $data=[];
+        if(session('merchant_store')){
+            $data['shop_id']=session('merchant_store')['shop_id'];
+        }
+        return $model->where($data)->order(['sort' => 'asc'])->select();
     }
 
     /**
@@ -50,7 +54,12 @@ class Delivery extends BaseModel
      */
     public function getList()
     {
+        $data=[];
+        if(session('merchant_store')){
+            $data['shop_id']=session('merchant_store')['shop_id'];
+        }
         return $this->with(['rule'])
+            ->where($data)
             ->order(['sort' => 'asc'])
             ->paginate(15, false, [
                 'query' => Request::instance()->request()

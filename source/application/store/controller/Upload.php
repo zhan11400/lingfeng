@@ -64,6 +64,10 @@ class Upload extends Controller
         $fileUrl = isset($this->config['engine'][$storage]) ? $this->config['engine'][$storage]['domain'] : '';
         // 添加文件库记录
         $model = new UploadFile;
+        $shop_id=0;
+        if(session('merchant_store')){
+            $shop_id=session('merchant_store')['shop_id'];
+        }
         $model->add([
             'group_id' => $group_id > 0 ? (int)$group_id : 0,
             'storage' => $storage,
@@ -72,6 +76,7 @@ class Upload extends Controller
             'file_size' => $fileInfo['size'],
             'file_type' => $fileType,
             'extension' => pathinfo($fileInfo['name'], PATHINFO_EXTENSION),
+            'shop_id'=>$shop_id
         ]);
         return $model;
     }

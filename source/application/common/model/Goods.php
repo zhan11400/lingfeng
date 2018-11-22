@@ -134,7 +134,7 @@ class Goods extends BaseModel
      * @return \think\Paginator
      * @throws \think\exception\DbException
      */
-    public function getList($status = null, $category_id = 0, $search = '', $sortType = 'all', $sortPrice = false)
+    public function getList($status = null, $category_id = 0, $search = '', $sortType = 'all', $sortPrice = false,$shop_id=0)
     {
         // 筛选条件
         $filter = [];
@@ -142,6 +142,9 @@ class Goods extends BaseModel
         $status > 0 && $filter['goods_status'] = $status;
         !empty($search) && $filter['goods_name'] = ['like', '%' . trim($search) . '%'];
 
+        if(session('merchant_store')){
+            $filter['shop_id']=session('merchant_store')['shop_id'];
+        }
         // 排序规则
         $sort = [];
         if ($sortType === 'all') {
@@ -181,6 +184,7 @@ class Goods extends BaseModel
      */
     public static function detail($goods_id)
     {
+
         return self::get($goods_id, ['category', 'image.file', 'spec', 'spec_rel.spec', 'delivery.rule']);
     }
 

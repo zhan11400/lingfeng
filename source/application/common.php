@@ -38,7 +38,6 @@ function yoshop_hash($password)
 {
     return md5(md5($password) . 'yoshop_salt_SmTRx');
 }
-
 /**
  * 获取当前域名及根路径
  * @return string
@@ -148,4 +147,14 @@ function array_merge_multiple($array1, $array2)
         }
     }
     return $data;
+}
+
+/**
+ * 检查手机号码格式
+ * @param $mobile 手机号码
+ */
+function check_mobile($mobile){
+    if(preg_match('/1[34578]\d{9}$/',$mobile))
+        return true;
+    return false;
 }

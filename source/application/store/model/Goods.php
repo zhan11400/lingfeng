@@ -25,7 +25,10 @@ class Goods extends GoodsModel
         }
         $data['content'] = isset($data['content']) ? $data['content'] : '';
         $data['wxapp_id'] = $data['spec']['wxapp_id'] = self::$wxapp_id;
-
+        $data['shop_id']=0;
+        if(session('merchant_store')){
+            $data['shop_id']=session('merchant_store')['shop_id'];
+        }
         // 开启事务
         Db::startTrans();
         try {
@@ -75,6 +78,9 @@ class Goods extends GoodsModel
         }
         $data['content'] = isset($data['content']) ? $data['content'] : '';
         $data['wxapp_id'] = $data['spec']['wxapp_id'] = self::$wxapp_id;
+        if(session('merchant_store')){
+            $data['shop_id']=session('merchant_store')['shop_id'];
+        }
         // 开启事务
         Db::startTrans();
         try {

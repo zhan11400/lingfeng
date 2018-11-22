@@ -25,6 +25,9 @@ class Delivery extends DeliveryModel
             return false;
         }
         $data['wxapp_id'] = self::$wxapp_id;
+        if(session('merchant_store')){
+            $data['shop_id']=session('merchant_store')['shop_id'];
+        }
         if ($this->allowField(true)->save($data)) {
             return $this->createDeliveryRule($data['rule']);
         }

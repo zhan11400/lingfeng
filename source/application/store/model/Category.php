@@ -65,7 +65,12 @@ class Category extends CategoryModel
      */
     private function deleteCache()
     {
-        return Cache::rm('category_' . self::$wxapp_id);
+        $shop_id=0;
+        if(session('merchant_store')){
+            $where['shop_id']=session('merchant_store')['shop_id'];
+            $shop_id=session('merchant_store')['shop_id'];
+          }
+        return Cache::rm('category_' . self::$wxapp_id.$shop_id);
     }
 
 }

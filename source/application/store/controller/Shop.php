@@ -23,7 +23,7 @@ class Shop extends Controller
      */
     public function add()
     {
-        if (!$this->request->isAjax()) {
+        if (!$this->request->isPost()) {
             // 店铺分类
             $catgory = ShopCategory::getCacheTree();
             return $this->fetch('add', compact('catgory', 'delivery'));
@@ -57,16 +57,17 @@ class Shop extends Controller
                $images[$k]['image_id'] =$k;
            }
             $model->image =$images;
+            $model->shop_logo_img=IMG_PATH.db("upload_file")->where(['file_id'=>$model->shop_logo])->value("file_name");
             return $this->fetch('edit', compact('model', 'catgory'));
         }
         // 更新记录
         $model = new ShopModel;
-        if ($model->edit($this->postData('shop'))) {
 
-            return $this->renderSuccess('添加成功', url('shop/index'));
+        if ($model->edit($this->postData('shop'))) {
+           $this->redirect(base_url().url('shop/index'));
+           //return $model->renderJson('添加成功', url('shop/index'));
         }
-        $error = $model->getError() ?: '更新失败';
-        return $this->renderError($error);
+        $this->error('操作失败');
     }
 
     /**

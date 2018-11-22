@@ -62,9 +62,15 @@ class UploadFile extends BaseModel
      */
     public function getList($group_id, $file_type = 'image')
     {
+
         $model = $this->where(['file_type' => $file_type, 'is_delete' => 0]);
         if ($group_id !== -1) {
             $model->where(compact('group_id'));
+        }
+        if(session('merchant_store')){
+            $where['shop_id']=session('merchant_store')['shop_id'];
+            $model->where($where);
+
         }
         return $model->order(['file_id' => 'desc'])
             ->paginate(32, false, [
