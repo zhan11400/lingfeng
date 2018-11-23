@@ -13,19 +13,8 @@
                                 <div class="am-u-sm-9 am-u-end">
                                     <input type="text" class="tpl-form-input" name="category[name]"
                                            value="" required>
-                                </div>
-                            </div>
-                            <div class="am-form-group">
-                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">上级分类 </label>
-                                <div class="am-u-sm-9 am-u-end">
-                                    <select name="category[parent_id]"
-                                            data-am-selected="{searchBox: 1, btnSize: 'sm'}">
-                                        <option value="0">顶级分类</option>
-                                        <?php if (isset($list)): foreach ($list as $first): ?>
-                                            <option value="<?= $first['category_id'] ?>">
-                                                <?= $first['name'] ?></option>
-                                        <?php endforeach; endif; ?>
-                                    </select>
+                                    <input type="hidden" name="category[parent_id]"
+                                           value="0" >
                                 </div>
                             </div>
                             <div class="am-form-group">
