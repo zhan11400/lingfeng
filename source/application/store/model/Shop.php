@@ -27,6 +27,10 @@ class Shop extends Model
             $this->error = '请上传店铺图片';
             return false;
         }
+        if (!isset($data['shop_logo']) || empty($data['shop_logo'])) {
+            $this->error = '请上传店铺logo图片';
+            return false;
+        }
         $data['content'] = isset($data['content']) ? $data['content'] : '';
         $data['shop_image']=serialize($data['images']);
         unset($data['images']);
@@ -53,7 +57,7 @@ class Shop extends Model
      * @return \think\Paginator
      * @throws \think\exception\DbException
      */
-    public function getList($status = null, $category_id = 0, $search = '', $sortType = 'all', $sortPrice = false)
+    public function getList($status = null, $category_id = 0, $search = '', $sortType = 'all', $pageSize = 10)
     {
         // 筛选条件
         $filter = [];
@@ -66,24 +70,41 @@ class Shop extends Model
         if ($sortType === 'all') {
             $sort = ['shop_sort', 'shop_id' => 'desc'];
         } elseif ($sortType === 'sales') {
-          //  $sort = ['goods_sales' => 'desc'];
-        } elseif ($sortType === 'price') {
+            $sort = ['goods_sales' => 'desc'];
+        } elseif ($sortType === 'new') {
+            $sort = ['shop_id' => 'desc'];
          //  $sort = $sortPrice ? ['goods_max_price' => 'desc'] : ['goods_min_price'];
         }
-
-      return $this->alias("s")->join("shop_category sc","sc.category_id=s.shop_cate_id","LEFT")
+        $db_add=[
+            'file'=>db("upload_file"),
+            'goods'=>db("goods"),
+        ];
+      $list= $this->alias("s")->join("shop_category sc","sc.category_id=s.shop_cate_id","LEFT")
           ->field("s.*,sc.name")
+          ->cache(true)
           ->where($filter)->order($sort)
-          ->paginate(10, false, [
+          ->paginate($pageSize, false, [
               'query' => Request::instance()->request()
-          ])->each(function($item, $key){
+          ])->each(function($item, $key) use($db_add){
               if($item['shop_status']==10) {
                   $item['shop_status_text'] = config("shop_status_up");
               }else{
-                  $item['shop_status_text'] =  config("shop_status_down");
+                  $item['shop_status_text'] = config("shop_status_down");
               }
+              $image_ids=unserialize($item['shop_image']);
+              $where['file_id']=array('in',$image_ids);
+              $files= $db_add['file']->where($where)->cache(true)->column("file_id,file_name");
+              foreach($files as $k=> $file_name){
+                  $images[$k]['file_path'] =IMG_PATH.$file_name;
+                  $images[$k]['image_id'] =$k;
+              }
+              $item['shop_image']=array_merge($images);
+              $item['shop_logo']= IMG_PATH.$db_add['file']->cache(true)->where(['file_id'=>$item['shop_logo']])->value("file_name");
+              $item['shop_goods_num']= $db_add['goods']->cache(true)->where(['shop_id'=>$item['shop_id']])->count("goods_id");
               return $item;
           });
+
+        return $list;
     }
     /**
      * 添加店铺
@@ -94,6 +115,10 @@ class Shop extends Model
     {
         if (!isset($data['images']) || empty($data['images'])) {
             $this->error = '请上传店铺图片';
+            return false;
+        }
+        if (!isset($data['shop_logo']) || empty($data['shop_logo'])) {
+            $this->error = '请上传店铺logo图片';
             return false;
         }
         $data['content'] = isset($data['content']) ? $data['content'] : '';
