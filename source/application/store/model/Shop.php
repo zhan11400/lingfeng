@@ -100,10 +100,10 @@ class Shop extends Model
         $data['shop_image']=serialize($data['images']);
         $data['update_time']=time();
         unset($data['images']);
+
         // 开启事务
         Db::startTrans();
         try {
-            // 添加店铺\
             $this->where(['shop_id'=>$data['shop_id']])->update($data);
             Db::commit();
             return true;

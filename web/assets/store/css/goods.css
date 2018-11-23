@@ -33,3 +33,4 @@
 .goods-spec-many .goods-sku .spec-sku-tabel input.ipt-w80 { width: 80px; }
 
 /*# sourceMappingURL=goods.css.map */
+#s_province,#s_city,#s_county{display: inline-block;width: 30%}

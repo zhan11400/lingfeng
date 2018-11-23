@@ -69,7 +69,29 @@
                                            value="" required>
                                 </div>
                             </div>
+                            <div class="am-form-group">
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">店铺地址</label>
+                                <div class="am-u-sm-9 am-u-end">
+                                    <select id="s_province" name="shop[province]"></select>&nbsp;&nbsp;
+                                    <select id="s_city" name="shop[city]" ></select>&nbsp;&nbsp;
+                                    <select id="s_county" name="shop[area]"></select>
+                                    <input type="text" id="address" name="shop[address]" placeholder="详细地址" value="">
+                                </div>
+                            </div>
 
+                            <div class="am-form-group">
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">店铺经纬度 </label>
+                                <div class="am-u-sm-9 am-u-end">
+                                    <input type="text" class="tpl-form-input" id="lng" name="shop[lng]"
+                                           value="" required style="display: inline-block;width: 30%;">
+                                    <input type="text" class="tpl-form-input" id="lat" name="shop[lat]"
+                                           value="" required style="display: inline-block;width: 30%;">
+                                    <button class="am-btn-primary getLatAndLng" type="button">获取经纬度</button>
+                                    <div id="container2"  style="margin-top:5px;width: 642px;
+                                    height: 300px;border: 1px solid gray;overflow:hidden;">
+                                    </div>
+                                </div>
+                            </div>
                             <div class="am-form-group">
                                 <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">店铺图片 </label>
                                 <div class="am-u-sm-9 am-u-end">
@@ -114,11 +136,11 @@
                                     <label class="am-radio-inline">
                                         <input type="radio" name="shop[shop_status]" value="10" data-am-ucheck
                                                checked>
-                                        上架
+                                        <?= config("shop_status_up") ?>
                                     </label>
                                     <label class="am-radio-inline">
                                         <input type="radio" name="shop[shop_status]" value="20" data-am-ucheck>
-                                        下架
+                                        <?= config("shop_status_down") ?>
                                     </label>
                                 </div>
                             </div>
@@ -155,9 +177,51 @@
 <script src="assets/store/plugins/umeditor/umeditor.config.js"></script>
 <script src="assets/store/plugins/umeditor/umeditor.min.js"></script>
 <script src="assets/store/js/goods.spec.js"></script>
+<script class="resources library" src="assets/store/js/area.js" type="text/javascript"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.5&ak=<?= BAIDU_AK?>"></script>
 <script>
+    _init_area();
     $(function () {
+        var map = new BMap.Map("container2");
+        map.centerAndZoom("梅州", 12);
+        map.enableScrollWheelZoom();    //启用滚轮放大缩小，默认禁用
+        map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
+        map.addControl(new BMap.NavigationControl());  //添加默认缩放平移控件
+        map.addControl(new BMap.OverviewMapControl()); //添加默认缩略地图控件
+        map.addControl(new BMap.OverviewMapControl({ isOpen: true, anchor: BMAP_ANCHOR_BOTTOM_RIGHT }));   //右下角，打开
 
+        var localSearch = new BMap.LocalSearch(map);
+        localSearch.enableAutoViewport(); //允许自动调节窗体大小
+        $(".getLatAndLng").click(function(){
+            map.clearOverlays();//清空原来的标注
+            var province=$("#s_province").val();
+            var city=$("#s_city").val();
+            var area=$("#s_county").val();
+            if(city=='地级市'|| area=='市、县级市'||province=='省份'){
+                layer.msg('请选择有效的省市区');return false;
+            }
+            var address = $("#address").val();
+            if(!address){
+                layer.msg('请填写详细地址!');
+                $('#address').focus();
+                return false;
+            }
+            var keyword=province+city+area+address;
+            localSearch.search(keyword);
+        });
+        localSearch.setSearchCompleteCallback(function (searchResult) {
+            var poi = searchResult.getPoi(0);
+            console.log(poi);
+            $("#lng").val(poi.point.lng);
+            $("#lat").val(poi.point.lat);
+            map.centerAndZoom(poi.point, 19);
+            var marker = new BMap.Marker(new BMap.Point(poi.point.lng, poi.point.lat));  // 创建标注，为要查询的地方对应的经纬度
+            map.addOverlay(marker);
+            var content =$("#address").val() + "<br/><br/>经度：" + poi.point.lng + "<br/>纬度：" + poi.point.lat;
+            var infoWindow = new BMap.InfoWindow("<p style='font-size:14px;'>" + content + "</p>");
+            marker.addEventListener("click", function () { this.openInfoWindow(infoWindow); });
+            // marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+        });
         // 富文本编辑器
         UM.getEditor('container');
 
