@@ -81,7 +81,7 @@ class Shop extends Model
         ];
       $list= $this->alias("s")->join("shop_category sc","sc.category_id=s.shop_cate_id","LEFT")
           ->field("s.*,sc.name")
-          ->cache(true)
+          ->cache(CACHE_TIME)
           ->where($filter)->order($sort)
           ->paginate($pageSize, false, [
               'query' => Request::instance()->request()
@@ -93,14 +93,14 @@ class Shop extends Model
               }
               $image_ids=unserialize($item['shop_image']);
               $where['file_id']=array('in',$image_ids);
-              $files= $db_add['file']->where($where)->cache(true)->column("file_id,file_name");
+              $files= $db_add['file']->where($where)->cache(CACHE_TIME)->column("file_id,file_name");
               foreach($files as $k=> $file_name){
                   $images[$k]['file_path'] =IMG_PATH.$file_name;
                   $images[$k]['image_id'] =$k;
               }
               $item['shop_image']=array_merge($images);
-              $item['shop_logo']= IMG_PATH.$db_add['file']->cache(true)->where(['file_id'=>$item['shop_logo']])->value("file_name");
-              $item['shop_goods_num']= $db_add['goods']->cache(true)->where(['shop_id'=>$item['shop_id']])->count("goods_id");
+              $item['shop_logo']= IMG_PATH.$db_add['file']->cache(CACHE_TIME)->where(['file_id'=>$item['shop_logo']])->value("file_name");
+              $item['shop_goods_num']= $db_add['goods']->cache(CACHE_TIME)->where(['shop_id'=>$item['shop_id']])->count("goods_id");
               return $item;
           });
 

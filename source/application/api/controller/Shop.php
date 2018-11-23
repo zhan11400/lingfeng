@@ -22,10 +22,8 @@ class Shop extends Controller
      */
     public function lists($category_id=0, $search='', $sortType='all', $pageSize=5)
     {
-        $time=time();
         $model = new ShopModel;
         $list = $model->getList(10, $category_id, $search, $sortType, $pageSize);
-        echo time()-$time;
         return $this->renderSuccess(compact('list'));
     }
 
