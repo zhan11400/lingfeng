@@ -19,6 +19,7 @@ class Index extends Controller
      */
     public function page()
     {
+        exit;
         // 页面元素
         $wxappPage = WxappPage::detail();
         $items = $wxappPage['page_data']['array']['items'];

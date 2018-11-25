@@ -1,8 +1,10 @@
 <?php
 
 namespace app\api\controller;
-
-use app\store\model\Shop as ShopModel;
+use app\api\model\UserFavoriteSho;
+use app\api\model\UserFavoriteShop;
+use app\common\model\Shop as ShopModel;
+use app\api\model\Shop as apiShop;
 
 /**
  * 商品控制器
@@ -11,8 +13,15 @@ use app\store\model\Shop as ShopModel;
  */
 class Shop extends Controller
 {
+  //  private $shop;
+
+  /*  public function __construct()
+    {
+       parent::__construct();
+        $this->shop=new ShopModel;
+    }*/
     /**
-     * 商品列表
+     * 店铺列表
      * @param $category_id
      * @param $search
      * @param $sortType
@@ -26,26 +35,42 @@ class Shop extends Controller
         $list = $model->getList(10, $category_id, $search, $sortType, $pageSize);
         return $this->renderSuccess(compact('list'));
     }
-
-    /**
-     * 获取商品详情
-     * @param $goods_id
-     * @return array
-     * @throws \think\exception\DbException
-     */
-    public function detail($goods_id)
+    //收藏店铺与取消收藏
+    public function collect()
     {
-        // 商品详情
-        $detail = GoodsModel::detail($goods_id);
-        if (!$detail || $detail['goods_status']['value'] != 10) {
-            return $this->renderError('很抱歉，商品信息不存在或已下架');
+        if(!request()->isPost()){
+            return $this->renderSuccess('请求方式有误');
         }
-        // 规格信息
-        $specData = $detail['spec_type'] == 20 ? $detail->getManySpecData($detail['spec_rel'], $detail['spec']) : null;
-//        $user = $this->getUser();
-//        // 购物车商品总数量
-//        $cart_total_num = (new CartModel($user['user_id']))->getTotalNum();
-        return $this->renderSuccess(compact('detail', 'cart_total_num', 'specData'));
+       $user=$this->getUser();
+        $model = new apiShop;
+        $data=input();
+        if(!$model->detail($data['shop_id'])){
+            return $this->renderSuccess('店铺不存在');
+        }
+        $UserFavoriteShop=new UserFavoriteShop();
+        $id_status=$UserFavoriteShop->is_collected($data['wxapp_id'],$user->user_id,$data['shop_id']);
+        $data['user_id']=$user->user_id;
+        if($id_status){
+            $id= $id_status->id;
+            if( $id_status->status==1){
+                $data['status']=0;
+                if( $UserFavoriteShop->favourite($data,$id)){
+                    return $this->renderSuccess('取消收藏成功');
+                }
+            }else{
+                $data['status']=1;
+                if( $UserFavoriteShop->favourite($data,$id)){
+                    return $this->renderSuccess('收藏成功');
+                }
+            }
+        }else{
+            $data['status']=1;
+            if( $UserFavoriteShop->favourite($data)){
+                return $this->renderSuccess('收藏成功');
+            }
+        }
+        return $this->renderError('收藏失败');
     }
+
 
 }
