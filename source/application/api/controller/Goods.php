@@ -4,6 +4,7 @@ namespace app\api\controller;
 
 use app\api\model\Goods as GoodsModel;
 use app\api\model\Cart as CartModel;
+use app\api\model\Shop;
 
 /**
  * 商品控制器
@@ -46,7 +47,11 @@ class Goods extends Controller
 //        $user = $this->getUser();
 //        // 购物车商品总数量
 //        $cart_total_num = (new CartModel($user['user_id']))->getTotalNum();
-        return $this->renderSuccess(compact('detail', 'cart_total_num', 'specData'));
+        $shop=(object)array();
+        if($detail['shop_id']){
+            $shop=(new Shop())->detail($detail['shop_id']);
+        }
+        return $this->renderSuccess(compact('detail', 'cart_total_num', 'specData','shop'));
     }
 
 }

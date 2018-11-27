@@ -34,8 +34,6 @@ class User extends Controller
         if(!request()->isPost()){
             return $this->renderSuccess('请求方式有误');
         }
-        $p=input("page");
-        $pageSize=input("pageSize",5);
         $user=$this->getUser();
         $UserFavoriteShop=new UserFavoriteShop();
         $list=$UserFavoriteShop->getList($user->user_id);

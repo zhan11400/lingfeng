@@ -17,6 +17,7 @@ class Category extends Controller
      */
     public function lists()
     {
+        //getPlatformALL
         $list = array_values(CategoryModel::getCacheTree());
         return $this->renderSuccess(compact('list'));
     }

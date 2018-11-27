@@ -134,11 +134,19 @@ class Goods extends BaseModel
      * @return \think\Paginator
      * @throws \think\exception\DbException
      */
-    public function getList($status = null, $category_id = 0, $search = '', $sortType = 'all', $sortPrice = false,$shop_id=0)
+    public function getList($status = null, $category_id = 0, $search = '', $sortType = 'all', $sortPrice = false)
     {
         // 筛选条件
         $filter = [];
-        $category_id > 0 && $filter['category_id'] = $category_id;
+      //  $category_id > 0 && $filter['category_id'] = $category_id;
+        if($category_id>0){
+         $cid=db("category")->where(['parent_id'=>$category_id])->column("category_id");
+          array_push($cid,$category_id);
+            $filter['category_id'] = ['in',$cid];
+        }else{
+            $filter['category_id'] = $category_id;
+        }
+
         $status > 0 && $filter['goods_status'] = $status;
         !empty($search) && $filter['goods_name'] = ['like', '%' . trim($search) . '%'];
 

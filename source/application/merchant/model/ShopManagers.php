@@ -42,6 +42,7 @@ class ShopManagers extends Model
             'shop_id' => $user['shop_id'],
             'is_login' => true,
         ]);
+        session("yoshop_store",null);
         return true;
     }
 

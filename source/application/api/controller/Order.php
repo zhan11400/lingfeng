@@ -49,6 +49,7 @@ class Order extends Controller
         if ($model->hasError()) {
             return $this->renderError($model->getError());
         }
+        //var_dump($order);exit;
         // 创建订单
         if ($model->add($this->user['user_id'], $order)) {
             // 发起微信支付
@@ -81,19 +82,24 @@ class Order extends Controller
             return $this->renderSuccess($order);
         }
         // 创建订单
-        if ($model->add($this->user['user_id'], $order)) {
-            // 清空购物车
-            $Card = new CartModel($this->user['user_id']);
-            $Card->clearAll();
-            // 发起微信支付
-            return $this->renderSuccess([
-                'payment' => $this->wxPay($model['order_no'], $this->user['open_id']
-                    , $order['order_pay_price']),
-                'order_id' => $model['order_id']
-            ]);
+        foreach($order as $k =>$v) {
+            if(!$model->add($this->user['user_id'], $order)){
+                $error = $model->getError() ?: '订单创建失败';
+                return $this->renderError($error);
+            }
+            $orderTotalPrice = array_sum(array_column($v, 'total_price'));
         }
-        $error = $model->getError() ?: '订单创建失败';
-        return $this->renderError($error);
+            // 清空购物车
+          //  $Card = new CartModel($this->user['user_id']);
+          //  $Card->clearAll();
+
+            // 发起微信支付
+           return $this->renderSuccess([
+                'payment' => $this->wxPay($model['order_no'], $this->user['open_id']
+                    , $orderTotalPrice),
+                'order_id' => 1,//$model['order_id']
+            ]);
+
     }
 
     /**

@@ -21,7 +21,6 @@ class Delivery extends BaseModel
     {
         return $this->hasMany('DeliveryRule');
     }
-
     /**
      * 计费方式
      * @param $value
@@ -55,6 +54,7 @@ class Delivery extends BaseModel
     public function getList()
     {
         $data=[];
+        $data['shop_id']=0;
         if(session('merchant_store')){
             $data['shop_id']=session('merchant_store')['shop_id'];
         }

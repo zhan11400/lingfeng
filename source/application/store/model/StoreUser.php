@@ -43,6 +43,7 @@ class StoreUser extends StoreUserModel
             'wxapp' => $user['wxapp']->toArray(),
             'is_login' => true,
         ]);
+        session("merchant_store",null);
         return true;
     }
 

@@ -7,7 +7,7 @@ use app\common\model\Shop as ShopModel;
 use app\api\model\Shop as apiShop;
 
 /**
- * 商品控制器
+ * 店铺控制器
  * Class Goods
  * @package app\api\controller
  */
@@ -35,7 +35,9 @@ class Shop extends Controller
         $list = $model->getList(10, $category_id, $search, $sortType, $pageSize);
         return $this->renderSuccess(compact('list'));
     }
-    //收藏店铺与取消收藏
+    /**
+     * 收藏店铺与取消收藏
+     * */
     public function collect()
     {
         if(!request()->isPost()){
@@ -45,7 +47,7 @@ class Shop extends Controller
         $model = new apiShop;
         $data=input();
         if(!$model->detail($data['shop_id'])){
-            return $this->renderSuccess('店铺不存在');
+            return $this->renderError('店铺不存在');
         }
         $UserFavoriteShop=new UserFavoriteShop();
         $id_status=$UserFavoriteShop->is_collected($data['wxapp_id'],$user->user_id,$data['shop_id']);
@@ -70,6 +72,18 @@ class Shop extends Controller
             }
         }
         return $this->renderError('收藏失败');
+    }
+    /**
+     * 店铺详情
+     */
+    public function shop_detail($shop_id){
+
+        $model = new apiShop;
+        $shop=$model->detail($shop_id);
+        if(!$shop){
+            return $this->renderError('店铺不存在');
+        }
+        return $this->renderSuccess(compact('shop'));
     }
 
 

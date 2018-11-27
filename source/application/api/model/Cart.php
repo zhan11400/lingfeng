@@ -89,6 +89,7 @@ class Cart
             $goods['total_price'] = $total_price = bcmul($goods['goods_price'], $cart['goods_num'], 2);
             // 商品总重量
             $goods['goods_total_weight'] = bcmul($goods['goods_sku']['goods_weight'], $cart['goods_num'], 2);
+            $shop_id[]=$goods['shop_id'];
             // 验证用户收货地址是否存在运费规则中
             if ($intraRegion = $goods['delivery']->checkAddress($cityId)) {
                 $goods['express_price'] = $goods['delivery']->calcTotalFee(
@@ -98,12 +99,41 @@ class Cart
             }
             $cartList[] = $goods->toArray();
         }
+        $arr1=array();
+        foreach ($cartList as  $v) {
+            $v1=$v['shop_id'];
+            unset($v['shop_id']);
+            $arr1[$v1][]=$v;
+        }
+    foreach($arr1 as $k =>$v){
+        $orderTotalPrice = array_sum(array_column($v, 'total_price'));
+        $allExpressPrice = array_column($cartList, 'express_price');
+        $expressPrice = $allExpressPrice ? Delivery::freightRule($allExpressPrice) : 0.00;
+       $data[$k]=[
+            'goods_list' => $cartList,                       // 商品列表
+            'order_total_num' => $this->getTotalNum(),       // 商品总数量
+            'order_total_price' => round($orderTotalPrice, 2),              // 商品总金额 (不含运费)
+            'order_pay_price' => bcadd($orderTotalPrice, $expressPrice, 2),    // 实际支付金额
+            'address' => $user['address_default'],  // 默认地址
+            'exist_address' => $exist_address,      // 是否存在收货地址
+            'express_price' => $expressPrice,       // 配送费用
+            'intra_region' => $intraRegion,         // 当前用户收货城市是否存在配送规则中
+            'has_error' => $this->hasError(),
+            'error_msg' => $this->getError(),
+             'shop_id' =>$k,
+        ];
+    }
+        return $data;
+        var_dump($data);
+        exit;
         // 商品总金额
         $orderTotalPrice = array_sum(array_column($cartList, 'total_price'));
         // 所有商品的运费金额
         $allExpressPrice = array_column($cartList, 'express_price');
+        var_dump($allExpressPrice);
         // 订单总运费金额
         $expressPrice = $allExpressPrice ? Delivery::freightRule($allExpressPrice) : 0.00;
+        exit;
         return [
             'goods_list' => $cartList,                       // 商品列表
             'order_total_num' => $this->getTotalNum(),       // 商品总数量

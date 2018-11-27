@@ -49,6 +49,7 @@ class User extends UserModel
      */
     public function login($post)
     {
+
         // 微信登录 获取session_key
         $session = $this->wxlogin($post['code']);
         // 自动注册用户
@@ -60,7 +61,13 @@ class User extends UserModel
         Cache::set($this->token, $session, 86400 * 7);
         return $user_id;
     }
-
+    public function SetTestToken($session)
+    {
+        $this->token = $this->token($session['openid']);
+        // 记录缓存, 7天
+        Cache::set($this->token, $session, 86400 * 7);
+        return $this->token;
+    }
     /**
      * 获取token
      * @return mixed
@@ -81,6 +88,7 @@ class User extends UserModel
     {
         // 获取当前小程序信息
         $wxapp = Wxapp::detail();
+       // var_dump($wxapp);exit;
         if (empty($wxapp['app_id']) || empty($wxapp['app_secret'])) {
             throw new BaseException(['msg' => '请到 [后台-小程序设置] 填写appid 和 appsecret']);
         }
