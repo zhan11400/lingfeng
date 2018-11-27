@@ -46,6 +46,7 @@ class Delivery extends DeliveryModel
             $this->error = '请选择可配送区域';
             return false;
         }
+        $data['wxapp_id'] = self::$wxapp_id;
         if ($this->allowField(true)->save($data)) {
             return $this->createDeliveryRule($data['rule']);
         }

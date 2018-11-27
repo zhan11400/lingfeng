@@ -2,7 +2,7 @@
 
 namespace app\merchant\controller\setting;
 
-use app\store\controller\Controller;
+use app\merchant\controller\Controller;
 use app\store\model\Region;
 use app\store\model\Delivery as DeliveryModel;
 

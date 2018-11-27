@@ -101,13 +101,12 @@ class Order extends OrderModel
      * @return bool
      * @throws \Exception
      */
-    public function add2($user_id, $orders)
+    public function add($user_id, $order)
     {
-            if (empty($order['address'])) {
-                $this->error = '请先选择收货地址';
-                return false;
-            }
-
+        if (empty($order['address'])) {
+            $this->error = '请先选择收货地址';
+            return false;
+        }
         Db::startTrans();
         // 记录订单信息
         $this->save([
@@ -142,6 +141,8 @@ class Order extends OrderModel
                 'goods_weight' => $goods['goods_sku']['goods_weight'],
                 'total_num' => $goods['total_num'],
                 'total_price' => $goods['total_price'],
+                'shop_id' => $goods['shop_id'],
+                'express_price' => $goods['express_price'],
             ];
             // 下单减库存
             $goods['deduct_stock_type'] == 10 && $deductStockData[] = [
@@ -167,83 +168,28 @@ class Order extends OrderModel
         Db::commit();
         return true;
     }
-    /**
-     * 新增订单
-     * @param $user_id
-     * @param $order
-     * @return bool
-     * @throws \Exception
-     */
-    public function add($user_id, $orders)
+
+    public function Increase_sub_orders($user_id,$order_id, $order)
     {
-   //     Db::startTrans();
-        foreach($orders as $k=> $order) {
-            if (empty($order['address'])) {
-                $this->error = '请先选择收货地址';
-                return false;
-            }
-            $data=[
-                'user_id' => $user_id,
-                'wxapp_id' => self::$wxapp_id,
-                'order_no' => $this->orderNo() . rand(0, 9999),
-                'total_price' => $order['order_total_price'],
-                'pay_price' => $order['order_pay_price'],
-                'express_price' => $order['express_price'],
-                'shop_id' => $order['shop_id'],
-            ];
-            // 记录订单信息
-            $order_id=$this->save($data);
-          // 订单商品列表
-                 $goodsList = [];
-                 // 更新商品库存 (下单减库存)
-                 $deductStockData = [];
-                 foreach ($order['goods_list'] as $goods) {
-                     $goodsList[] = [
-                         'user_id' => $user_id,
-                         'wxapp_id' => self::$wxapp_id,
-                         'goods_id' => $goods['goods_id'],
-                         'goods_name' => $goods['goods_name'],
-                         'image_id' => $goods['image'][0]['image_id'],
-                         'deduct_stock_type' => $goods['deduct_stock_type'],
-                         'spec_type' => $goods['spec_type'],
-                         'spec_sku_id' => $goods['goods_sku']['spec_sku_id'],
-                         'goods_spec_id' => $goods['goods_sku']['goods_spec_id'],
-                         'goods_attr' => $goods['goods_sku']['goods_attr'],
-                         'content' => $goods['content'],
-                         'goods_no' => $goods['goods_sku']['goods_no'],
-                         'goods_price' => $goods['goods_sku']['goods_price'],
-                         'line_price' => $goods['goods_sku']['line_price'],
-                         'goods_weight' => $goods['goods_sku']['goods_weight'],
-                         'total_num' => $goods['total_num'],
-                         'total_price' => $goods['total_price'],
-                     ];
-                     // 下单减库存
-                     $goods['deduct_stock_type'] == 10 && $deductStockData[] = [
-                         'goods_spec_id' => $goods['goods_sku']['goods_spec_id'],
-                         'stock_num' => ['dec', $goods['total_num']]
-                     ];
-                 }
-                 // 保存订单商品信息
-                 $this->goods()->saveAll($goodsList);
-                 // 更新商品库存
-                 !empty($deductStockData) && (new GoodsSpec)->isUpdate()->saveAll($deductStockData);
-                 // 记录收货地址
-                 $this->address()->save([
-                     'user_id' => $user_id,
-                     'wxapp_id' => self::$wxapp_id,
-                     'name' => $order['address']['name'],
-                     'phone' => $order['address']['phone'],
-                     'province_id' => $order['address']['province_id'],
-                     'city_id' => $order['address']['city_id'],
-                     'region_id' => $order['address']['region_id'],
-                     'detail' => $order['address']['detail'],
-                 ]);
-         //   sleep(10);
-        }
-     //   Db::commit();
+        Db::startTrans();
+        // 记录订单信息
+       $id= $this->insertGetId([
+            'user_id' => $user_id,
+            'wxapp_id' => self::$wxapp_id,
+            'parent_id'=>$order_id,
+            'order_no' => $this->orderNo(),
+            'total_price' => $order['order_total_price'],
+            'pay_price' => $order['order_pay_price'],
+            'express_price' => $order['express_price'],
+           'shop_id' => $order['shop_id'],
+           'create_time'=>time(),
+           'update_time'=>time(),
+        ]);
+        $this->where(['order_id'=>$order_id])->update(['is_hidden'=>1]);
+        db('order_goods')->where(['order_id'=>$order_id,'shop_id'=>$order['shop_id']])->update(['order_id'=>$id]);
+        Db::commit();
         return true;
     }
-
     /**
      * 用户中心订单列表
      * @param $user_id
