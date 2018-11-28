@@ -190,6 +190,13 @@ class Order extends OrderModel
         Db::commit();
         return true;
     }
+    public function add_order_shop_id($order_id,$shop_id)
+    {
+        Db::startTrans();
+        $this->where(['order_id'=>$order_id])->update(['shop_id'=>$shop_id]);
+        Db::commit();
+        return true;
+    }
     /**
      * 用户中心订单列表
      * @param $user_id

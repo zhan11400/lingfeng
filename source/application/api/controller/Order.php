@@ -85,35 +85,39 @@ class Order extends Controller
 
 
 
-
+        //var_dump($order);exit;
         // 创建订单
         if ($model->add($this->user['user_id'], $order)) {
             // 清空购物车
-          //  $Card = new CartModel($this->user['user_id']);
-           // $Card->clearAll();
-
+            $Card = new CartModel($this->user['user_id']);
+            $Card->clearAll();
+            $order_id = $model['order_id'];
             //拆单
-            $order_id= $model['order_id'];
-            $arr1=array();
-            foreach ($order['goods_list']  as  $v) {
-                $v1=$v['shop_id'];
-                unset($v['shop_id']);
-                $arr1[$v1][]=$v;
-            }
-            foreach($arr1 as $k=>$v){
-                $allExpressPrice = array_column($v, 'express_price');
-                $expressPrice = $allExpressPrice ? Delivery::freightRule($allExpressPrice) : 0.00;
-                // 商品总金额
-                $orderTotalPrice = array_sum(array_column($v, 'total_price'));
-                $data= [
-                    // 商品列表
-                    'order_total_price' => round($orderTotalPrice, 2),              // 商品总金额 (不含运费)
-                    'order_pay_price' => bcadd($orderTotalPrice, $expressPrice, 2),    // 实际支付金额
-                    'address' => $this->user['address_default'],  // 默认地址
-                    'express_price' => $expressPrice,       // 配送费用
-                    'shop_id'=>$k,
-                ];
-                $model->Increase_sub_orders($this->user['user_id'],$order_id,$data);
+            $shop_id_arr=unserialize($order['shop_id']);
+            if(count($shop_id_arr)>1) {
+                $arr1 = array();
+                foreach ($order['goods_list'] as $v) {
+                    $v1 = $v['shop_id'];
+                    unset($v['shop_id']);
+                    $arr1[$v1][] = $v;
+                }
+                foreach ($arr1 as $k => $v) {
+                    $allExpressPrice = array_column($v, 'express_price');
+                    $expressPrice = $allExpressPrice ? Delivery::freightRule($allExpressPrice) : 0.00;
+                    // 商品总金额
+                    $orderTotalPrice = array_sum(array_column($v, 'total_price'));
+                    $data = [
+                        // 商品列表
+                        'order_total_price' => round($orderTotalPrice, 2),              // 商品总金额 (不含运费)
+                        'order_pay_price' => bcadd($orderTotalPrice, $expressPrice, 2),    // 实际支付金额
+                        'address' => $this->user['address_default'],  // 默认地址
+                        'express_price' => $expressPrice,       // 配送费用
+                        'shop_id' => $k,
+                    ];
+                    $model->Increase_sub_orders($this->user['user_id'], $order_id, $data);
+                }
+            }else{
+                $model->add_order_shop_id($order_id,$shop_id_arr[0]);
             }
             // 发起微信支付
             return $this->renderSuccess([

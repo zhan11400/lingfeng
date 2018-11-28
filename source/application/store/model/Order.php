@@ -20,9 +20,11 @@ class Order extends OrderModel
      */
     public function getList($filter)
     {
+        $filter['shop_id']=0;
        if(session('merchant_store')){
            $filter['shop_id']=session('merchant_store')['shop_id'];
        }
+        $filter['is_hidden']=0;
         return $this->with(['goods.image', 'address', 'user'])
             ->where($filter)
             ->order(['create_time' => 'desc'])->paginate(10, false, [
