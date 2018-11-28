@@ -151,7 +151,36 @@ return [
         'name' => '应用中心',
         'icon' => 'icon-application',
         'is_svg' => true,   // 多色图标
-//        'index' => 'plugins/index',
+        'index' => 'plugins/index',
+        'submenu' => [
+            [
+                'name' => '拼团管理',
+                'active' => true,
+                'submenu' => [
+                    [
+                        'name' => '商品管理',
+                        'index' => 'plugins.pt.goods/index'
+                    ],
+                    [
+                        'name' => '商品分类',
+                        'index' => 'plugins.pt.category/index'
+                    ],
+                    [
+                        'name' => '订单管理',
+                        'index' => 'plugins.pt.order/all_list'
+                    ],
+                    /*[
+                        'name' => '商品分类',
+                        'index' => 'setting.cache/clear'
+                    ],
+
+                    [
+                        'name' => '售后订单',
+                        'index' => 'setting.cache/clear'
+                    ],*/
+                ]
+            ]
+        ]
     ],
     'setting' => [
         'name' => '设置',
