@@ -80,6 +80,10 @@ class Goods extends GoodsModel
         $data['wxapp_id'] = $data['spec']['wxapp_id'] = self::$wxapp_id;
         if(session('merchant_store')){
             $data['shop_id']=session('merchant_store')['shop_id'];
+            $shop_status=db("shop")->where(['shop_id'=>$data['shop_id']])->value("shop_status");
+            if($shop_status==20){
+                $data['goods_status']=30;
+            }
         }
         // 开启事务
         Db::startTrans();

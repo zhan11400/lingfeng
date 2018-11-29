@@ -25,7 +25,7 @@ class Goods extends Controller
     public function lists($category_id, $search, $sortType, $sortPrice)
     {
         $model = new GoodsModel;
-        $list = $model->getList(10, $category_id, $search, $sortType, $sortPrice);
+        $list = $model->getApiList(10, $category_id, $search, $sortType, $sortPrice);
         return $this->renderSuccess(compact('list'));
     }
 

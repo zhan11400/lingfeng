@@ -24,6 +24,7 @@
                             <thead>
                             <tr>
                                 <th>商品ID</th>
+                                <th>所属店铺</th>
                                 <th>商品图片</th>
                                 <th>商品名称</th>
                                 <th>商品分类</th>
@@ -39,6 +40,9 @@
                                 <tr>
                                     <td class="am-text-middle"><?= $item['goods_id'] ?></td>
                                     <td class="am-text-middle">
+                                        <p class="item-title"><?= empty($item['shop']['shop_name'])?'平台自营':$item['shop']['shop_name'] ?></p>
+                                    </td>
+                                    <td class="am-text-middle">
                                         <a href="<?= $item['image'][0]['file_path'] ?>"
                                            title="点击查看大图" target="_blank">
                                             <img src="<?= $item['image'][0]['file_path'] ?>"
@@ -48,6 +52,7 @@
                                     <td class="am-text-middle">
                                         <p class="item-title"><?= $item['goods_name'] ?></p>
                                     </td>
+
                                     <td class="am-text-middle"><?= $item['category']['name'] ?></td>
                                     <td class="am-text-middle"><?= $item['sales_actual'] ?></td>
                                     <td class="am-text-middle"><?= $item['goods_sort'] ?></td>

@@ -68,6 +68,9 @@ class Shop extends \app\common\model\Shop
         // 开启事务
         Db::startTrans();
         try {
+            if($data['shop_status']==20){
+                db("goods")->where(['shop_id'=>$data['shop_id']])->update(['goods_status'=>30]);
+            }
             $this->where(['shop_id'=>$data['shop_id']])->update($data);
             Db::commit();
             return true;

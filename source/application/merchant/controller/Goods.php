@@ -70,9 +70,7 @@ class Goods extends Controller
      */
     public function edit($goods_id)
     {
-        if(session('merchant_store')){
-            $where['shop_id']=session('merchant_store')['shop_id'];
-        }
+        $where['shop_id']=session('merchant_store')['shop_id'];
         $goods=new GoodsModel();
         $where['goods_id']=$goods_id;
         if(!$goods->where($where)->find()){

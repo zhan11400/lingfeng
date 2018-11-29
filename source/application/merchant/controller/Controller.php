@@ -68,7 +68,7 @@ class Controller extends \think\Controller
             // 输出到view
             $this->assign([
                 'base_url' => base_url(),                      // 当前域名
-                'store_url' => url('/store'),              // 后台模块url
+                'store_url' => url('/merchant'),              // 后台模块url
                 'group' => $this->group,
                 'menus' => $this->menus(),                     // 后台菜单
                 'store' => $this->store,                       // 商家登录信息

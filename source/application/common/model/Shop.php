@@ -50,7 +50,6 @@ class Shop extends Model
         ];
       $list= $this->alias("s")->join("shop_category sc","sc.category_id=s.shop_cate_id","LEFT")
           ->field("s.*,sc.name")
-          ->cache(CACHE_TIME)
           ->where($filter)->order($sort)
           ->paginate($pageSize, false, [
               'query' => Request::instance()->request()

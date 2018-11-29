@@ -40,6 +40,7 @@ class Delivery extends BaseModel
     {
         $model = new static;
         $data=[];
+        $data['shop_id']=0;
         if(session('merchant_store')){
             $data['shop_id']=session('merchant_store')['shop_id'];
         }

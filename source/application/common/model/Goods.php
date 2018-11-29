@@ -33,6 +33,14 @@ class Goods extends BaseModel
     {
         return $this->belongsTo('Category');
     }
+    /**
+     * 关联店铺分类表
+     * @return \think\model\relation\BelongsTo
+     */
+    public function shop()
+    {
+        return $this->belongsTo('Shop');
+    }
 
     /**
      * 关联商品规格表
@@ -77,7 +85,7 @@ class Goods extends BaseModel
      */
     public function getGoodsStatusAttr($value)
     {
-        $status = [10 => '上架', 20 => '下架'];
+        $status = [10 => '上架', 20 => '下架', 30 => '强制下架'];
         return ['text' => $status[$value], 'value' => $value];
     }
 
@@ -138,10 +146,59 @@ class Goods extends BaseModel
     {
         // 筛选条件
         $filter = [];
-      //  $category_id > 0 && $filter['category_id'] = $category_id;
+        $category_id > 0 && $filter['category_id'] = $category_id;
+
+        $status > 0 && $filter['goods_status'] = $status;
+        !empty($search) && $filter['goods_name'] = ['like', '%' . trim($search) . '%'];
+        if(session('merchant_store')){
+            $filter['shop_id']=session('merchant_store')['shop_id'];
+        }
+        // 排序规则
+        $sort = [];
+        if ($sortType === 'all') {
+            $sort = ['goods_sort', 'goods_id' => 'desc'];
+        } elseif ($sortType === 'sales') {
+            $sort = ['goods_sales' => 'desc'];
+        } elseif ($sortType === 'price') {
+            $sort = $sortPrice ? ['goods_max_price' => 'desc'] : ['goods_min_price'];
+        }
+        // 商品表名称
+        $tableName = $this->getTable();
+        // 多规格商品 最高价与最低价
+        $GoodsSpec = new GoodsSpec;
+        $minPriceSql = $GoodsSpec->field(['MIN(goods_price)'])
+            ->where('goods_id', 'EXP', "= `$tableName`.`goods_id`")->buildSql();
+        $maxPriceSql = $GoodsSpec->field(['MAX(goods_price)'])
+            ->where('goods_id', 'EXP', "= `$tableName`.`goods_id`")->buildSql();
+        // 执行查询
+
+        $list = $this->field(['*', '(sales_initial + sales_actual) as goods_sales',
+            "$minPriceSql AS goods_min_price",
+            "$maxPriceSql AS goods_max_price"
+        ])->with(['category', 'image.file', 'spec','shop'])
+            ->where('is_delete', '=', 0)
+            ->where($filter)
+            ->order($sort)
+            ->paginate(15, false, [
+                'query' => Request::instance()->request()
+            ])->each(function($item,$key){
+               /* if($item['shop_id']>0){
+                 $item['shop_name']=db("shop")->where(['shop_id'=>$item['shop_id']])->cache(CACHE_TIME)->value("shop_name");
+                }else{
+                    $item['shop_name']='平台自营';
+                }*/
+                return $item;
+            });
+        return $list;
+    }
+    public function getApiList($status = null, $category_id = 0, $search = '', $sortType = 'all', $sortPrice = false)
+    {
+        // 筛选条件
+        $filter = [];
+        //  $category_id > 0 && $filter['category_id'] = $category_id;
         if($category_id>0){
-         $cid=db("category")->where(['parent_id'=>$category_id])->column("category_id");
-          array_push($cid,$category_id);
+            $cid=db("category")->where(['parent_id'=>$category_id])->column("category_id");
+            array_push($cid,$category_id);
             $filter['category_id'] = ['in',$cid];
         }else{
             $filter['category_id'] = $category_id;
@@ -150,9 +207,6 @@ class Goods extends BaseModel
         $status > 0 && $filter['goods_status'] = $status;
         !empty($search) && $filter['goods_name'] = ['like', '%' . trim($search) . '%'];
 
-        if(session('merchant_store')){
-            $filter['shop_id']=session('merchant_store')['shop_id'];
-        }
         // 排序规则
         $sort = [];
         if ($sortType === 'all') {
@@ -183,7 +237,6 @@ class Goods extends BaseModel
             ]);
         return $list;
     }
-
     /**
      * 获取商品详情
      * @param $goods_id

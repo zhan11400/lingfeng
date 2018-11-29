@@ -12,7 +12,7 @@ class Shop extends Controller
     public function index()
     {
         $model = new ShopModel;
-        $list=$model->getList($status = null, $category_id = 0, $search = '', $sortType = 'all', $sortPrice = false);
+        $list=$model->getList($status = null, $category_id = 0, $search = '', $sortType = 'all');
         $catgory = ShopCategory::getCacheTree();
       //  dump($list);
        return $this->fetch('index',compact('catgory', 'list'));
