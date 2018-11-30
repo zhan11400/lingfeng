@@ -3,6 +3,7 @@
 namespace app\api\controller;
 use app\api\model\UserFavoriteSho;
 use app\api\model\UserFavoriteShop;
+use app\common\model\Goods;
 use app\common\model\Shop as ShopModel;
 use app\api\model\Shop as apiShop;
 
@@ -85,6 +86,19 @@ class Shop extends Controller
         }
         return $this->renderSuccess(compact('shop'));
     }
+    /**
+     * 店铺详情
+     */
+    public function shop_goods($shop_id,$category_id=0,$search=''){
+        $model = new apiShop;
+        $shop=$model->detail($shop_id);
+        if(!$shop){
+            return $this->renderError('店铺不存在或者已下架');
+        }
+        $goods_model=new Goods();
+        $shop=$goods_model->getShopGoodsList($status = 10, $shop_id,$category_id, $search );
 
+        return $this->renderSuccess(compact('shop'));
+    }
 
 }

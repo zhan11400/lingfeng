@@ -20,20 +20,20 @@
                             <div class="am-form-group">
                                 <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">店内商品分类 </label>
                                 <div class="am-u-sm-9 am-u-end">
-                                    <select name="goods[category_id]" required
+                                    <select name="goods[plat_category_id]" required
                                             data-am-selected="{searchBox: 1, btnSize: 'sm',  placeholder:'请选择商品分类'}">
                                         <option value=""></option>
                                         <?php if (isset($catgory)): foreach ($catgory as $first): ?>
                                             <option value="<?= $first['category_id'] ?>"
-                                                <?= $model['category_id'] == $first['category_id'] ? 'selected' : '' ?>>
+                                                <?= $model['plat_category_id'] == $first['category_id'] ? 'selected' : '' ?>>
                                                 <?= $first['name'] ?></option>
                                             <?php if (isset($first['child'])): foreach ($first['child'] as $two): ?>
                                                 <option value="<?= $two['category_id'] ?>"
-                                                    <?= $model['category_id'] == $two['category_id'] ? 'selected' : '' ?>>
+                                                    <?= $model['plat_category_id'] == $two['category_id'] ? 'selected' : '' ?>>
                                                     　　<?= $two['name'] ?></option>
                                                 <?php if (isset($two['child'])): foreach ($two['child'] as $three): ?>
                                                     <option value="<?= $three['category_id'] ?>"
-                                                        <?= $model['category_id'] == $three['category_id'] ? 'selected' : '' ?>>
+                                                        <?= $model['plat_category_id'] == $three['category_id'] ? 'selected' : '' ?>>
                                                         　　　<?= $three['name'] ?></option>
                                                 <?php endforeach; endif; ?>
                                             <?php endforeach; endif; ?>
@@ -47,20 +47,20 @@
                             <div class="am-form-group">
                                 <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">平台商品分类 </label>
                                 <div class="am-u-sm-9 am-u-end">
-                                    <select name="goods[plat_category_id]" required
+                                    <select name="goods[category_id]" required
                                             data-am-selected="{searchBox: 1, btnSize: 'sm',  placeholder:'请选择商品分类'}">
                                         <option value=""></option>
                                         <?php if (isset($platformcatgory)): foreach ($platformcatgory as $first): ?>
                                             <option value="<?= $first['category_id'] ?>"
-                                                <?= $model['plat_category_id'] == $first['category_id'] ? 'selected' : '' ?>>
+                                                <?= $model['category_id'] == $first['category_id'] ? 'selected' : '' ?>>
                                                 <?= $first['name'] ?></option>
                                             <?php if (isset($first['child'])): foreach ($first['child'] as $two): ?>
                                                 <option value="<?= $two['category_id'] ?>"
-                                                    <?= $model['plat_category_id'] == $two['category_id'] ? 'selected' : '' ?>>
+                                                    <?= $model['category_id'] == $two['category_id'] ? 'selected' : '' ?>>
                                                     　　<?= $two['name'] ?></option>
                                                 <?php if (isset($two['child'])): foreach ($two['child'] as $three): ?>
                                                     <option value="<?= $three['category_id'] ?>"
-                                                        <?= $model['plat_category_id'] == $three['category_id'] ? 'selected' : '' ?>>
+                                                        <?= $model['category_id'] == $three['category_id'] ? 'selected' : '' ?>>
                                                         　　　<?= $three['name'] ?></option>
                                                 <?php endforeach; endif; ?>
                                             <?php endforeach; endif; ?>

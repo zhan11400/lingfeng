@@ -58,4 +58,13 @@ class Shop extends Model
         $item['shop_goods_num']= db("goods")->cache(CACHE_TIME)->where(['shop_id'=>$item['shop_id']])->count("goods_id");
         return $item;
     }
+
+    public function goods($shop_id,$cate_id)
+    {
+        $where['shop_id']=$shop_id;
+        if($cate_id>0) {
+            $where['plat_category_id'] = $cate_id;
+        }
+        db("goods")->where($where)->order("sort desc")->paginate(10);
+    }
 }

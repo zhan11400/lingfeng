@@ -237,6 +237,48 @@ class Goods extends BaseModel
             ]);
         return $list;
     }
+
+
+    public function getShopGoodsList($status = null,$shop_id, $category_id = 0, $search = '', $sortType = 'all', $sortPrice = false)
+    {
+        // 筛选条件
+        $filter = [];
+         $category_id > 0 && $filter['plat_category_id'] = $category_id;
+        $filter['shop_id'] = $shop_id;
+
+        $status > 0 && $filter['goods_status'] = $status;
+        !empty($search) && $filter['goods_name'] = ['like', '%' . trim($search) . '%'];
+
+        // 排序规则
+        $sort = [];
+        if ($sortType === 'all') {
+            $sort = ['goods_sort', 'goods_id' => 'desc'];
+        } elseif ($sortType === 'sales') {
+            $sort = ['goods_sales' => 'desc'];
+        } elseif ($sortType === 'price') {
+            $sort = $sortPrice ? ['goods_max_price' => 'desc'] : ['goods_min_price'];
+        }
+        // 商品表名称
+        $tableName = $this->getTable();
+        // 多规格商品 最高价与最低价
+        $GoodsSpec = new GoodsSpec;
+        $minPriceSql = $GoodsSpec->field(['MIN(goods_price)'])
+            ->where('goods_id', 'EXP', "= `$tableName`.`goods_id`")->buildSql();
+        $maxPriceSql = $GoodsSpec->field(['MAX(goods_price)'])
+            ->where('goods_id', 'EXP', "= `$tableName`.`goods_id`")->buildSql();
+        // 执行查询
+        $list = $this->field(['*', '(sales_initial + sales_actual) as goods_sales',
+            "$minPriceSql AS goods_min_price",
+            "$maxPriceSql AS goods_max_price"
+        ])->with(['category', 'image.file', 'spec'])
+            ->where('is_delete', '=', 0)
+            ->where($filter)
+            ->order($sort)
+            ->paginate(1, false, [
+                'query' => Request::instance()->request()
+            ]);
+        return $list;
+    }
     /**
      * 获取商品详情
      * @param $goods_id
