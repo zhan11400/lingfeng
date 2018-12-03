@@ -110,7 +110,7 @@
                                         <div class="uploader-list am-cf">
                                             <?php if ($model['shop_logo']): ?>
                                                 <div class="file-item">
-                                                    <img src="<?= $model['shop_logo'] ?>">
+                                                    <img src="<?= $model['shop_logo_img'] ?>">
                                                     <input type="hidden" name="shop[shop_logo]"
                                                            value="<?= $model['shop_logo'] ?>">
                                                     <i class="iconfont icon-shanchu file-item-delete"></i>

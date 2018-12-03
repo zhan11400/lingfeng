@@ -179,7 +179,25 @@ return [
                         'index' => 'setting.cache/clear'
                     ],*/
                 ]
+            ],
+            [
+            'name' => '入驻申请',
+            'active' => true,
+            'submenu' => [
+                [
+                'name' => '微商城入驻',
+                'index' => 'user_apply/index',
+             ],
+                [
+                    'name' => '店铺入驻',
+                    'index' => 'user_apply/shop_apply',
+                ],
+                [
+                    'name' => '广告入驻',
+                    'index' => 'user_apply/ad_apply',
+                ],
             ]
+        ]
         ]
     ],
     'setting' => [

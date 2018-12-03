@@ -58,17 +58,20 @@ class Shop extends Controller
             if( $id_status->status==1){
                 $data['status']=0;
                 if( $UserFavoriteShop->favourite($data,$id)){
+					db("shop")->where(["shop_id"=>$data['shop_id']])->setDec("collect_num");
                     return $this->renderSuccess('取消收藏成功');
                 }
             }else{
                 $data['status']=1;
                 if( $UserFavoriteShop->favourite($data,$id)){
+					db("shop")->where(["shop_id"=>$data['shop_id']])->setInc("collect_num");
                     return $this->renderSuccess('收藏成功');
                 }
             }
         }else{
             $data['status']=1;
             if( $UserFavoriteShop->favourite($data)){
+				db("shop")->where(["shop_id"=>$data['shop_id']])->setInc("collect_num");
                 return $this->renderSuccess('收藏成功');
             }
         }
@@ -78,16 +81,23 @@ class Shop extends Controller
      * 店铺详情
      */
     public function shop_detail($shop_id){
-
+		$user=$this->getUser();   // 用户信息
+	$user_id=$user->user_id;
         $model = new apiShop;
         $shop=$model->detail($shop_id);
         if(!$shop){
             return $this->renderError('店铺不存在');
         }
+		$is_collect=db('UserFavoriteShop')->where(['user_id'=>$user_id,'shop_id'=>$shop_id])->find();
+		if(!$is_collect){
+			$shop->is_collect=0;
+		}else{
+			$shop->is_collect=$is_collect['status'];
+		}
         return $this->renderSuccess(compact('shop'));
     }
     /**
-     * 店铺详情
+     * 店铺的商品列表
      */
     public function shop_goods($shop_id,$category_id=0,$search=''){
         $model = new apiShop;
