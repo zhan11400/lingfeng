@@ -49,7 +49,7 @@ class Controller extends \think\Controller
         // 商家登录信息
         $this->store = Session::get('merchant_store');
         //店铺id
-        $this->shop_id=$this->store['shop_id'];
+         $this->shop_id=$this->store['shop_id'];
         // 当前路由信息
         $this->getRouteinfo();
         // 验证登录

@@ -6,6 +6,7 @@ use app\api\controller\Controller;
 use app\api\model\Order as OrderModel;
 use app\api\model\Wxapp as WxappModel;
 use app\common\library\wechat\WxPay;
+use think\Db;
 
 /**
  * 用户订单管理
@@ -83,9 +84,16 @@ class Order extends Controller
     public function receipt($order_id)
     {
         $model = OrderModel::getUserOrderDetail($order_id, $this->user['user_id']);
+        Db::startTrans();
         if ($model->receipt()) {
+            if($model->shop_id>0) {
+                db("shop")->where(['shop_id' => $model->shop_id])->setInc(['money' => $model->total_price]);
+                shop_money_log( $model->shop_id,$model->total_price,'订单号'.$model->order_no.'确认收货',0);
+            }
+            Db::commit();
             return $this->renderSuccess();
         }
+        Db::rollback();
         return $this->renderError($model->getError());
     }
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace app\store\controller;
+namespace app\store\controller\plugins;
 
-
+use app\store\controller\Controller;
 
 /**
  * 用户管理

@@ -70,11 +70,27 @@ return [
             ],
         ]
     ],
+    'finance' => [
+        'name' => '财务中心',
+        'icon' => 'icon-order',
+        'is_svg' => true,   // 多色图标
+        'index' => 'finance/index',
+        'submenu' => [
+            [
+                'name' => '钱包记录',
+                'index' => 'finance/index',
+            ],
+            [
+                'name' => '提现记录',
+                'index' => 'finance/apply_log',
+            ],
+           ]
+    ],
     'plugins' => [
         'name' => '应用中心',
         'icon' => 'icon-application',
         'is_svg' => true,   // 多色图标
-//        'index' => 'plugins/index',
+        'index' => 'plugins/index',
     ],
     'setting' => [
         'name' => '设置',

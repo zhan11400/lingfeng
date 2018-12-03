@@ -36,11 +36,10 @@
                             <?php if (!$list->isEmpty()): foreach ($list as $item): ?>
                                 <tr>
                                     <td class="am-text-middle"><?= $item['shop_id'] ?></td>
-
+                                    <td class="am-text-middle"><?= $item['name'] ?></td>
                                     <td class="am-text-middle">
                                         <p class="item-title"><?= $item['shop_name'] ?></p>
                                     </td>
-                                    <td class="am-text-middle"><?= $item['name'] ?></td>
                                     <td class="am-text-middle"><?= $item['shop_sort']?><?= $item['shop_status'] ?></td>
                                     <td class="am-text-middle">
                                             <span class="<?= $item['shop_status']== 10 ? 'x-color-green'

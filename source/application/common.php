@@ -158,3 +158,13 @@ function check_mobile($mobile){
         return true;
     return false;
 }
+
+function shop_money_log($shop_id,$money,$text,$type){
+    $data['shop_id']=$shop_id;
+    $data['money']=$money;
+    $data['text']=$text;
+    $data['type']=$type;
+    $data['wxapp_id']=config("wxapp_id");
+    $data['create_time']=time();
+    db("shop_money_log")->insert($data);
+}

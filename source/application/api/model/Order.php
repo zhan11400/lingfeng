@@ -283,6 +283,8 @@ class Order extends OrderModel
             $this->error = '该订单不合法';
             return false;
         }
+
+
         return $this->save([
             'receipt_status' => 20,
             'receipt_time' => time(),

@@ -4,6 +4,7 @@ namespace app\store\model;
 
 
 use think\Model;
+use think\Request;
 
 /**
  * 用户模型
@@ -22,6 +23,8 @@ class UserApply extends Model
         return $this->where(['type'=>$type])
             ->with(['user'])
             ->order('create_time desc')
-            ->paginate(10);
+            ->paginate(10, false, [
+                'query' => Request::instance()->request()
+            ]);
     }
 }
