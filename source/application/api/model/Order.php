@@ -59,10 +59,16 @@ class Order extends OrderModel
         // 是否存在收货地址
         $exist_address = !$user['address']->isEmpty();
         // 验证用户收货地址是否存在运费规则中
-        if (!$intraRegion = $goods['delivery']->checkAddress($cityId)) {
+       /* if (!$intraRegion = $goods['delivery']->checkAddress($cityId)) {
           //  $exist_address && $this->setError('很抱歉，您的收货地址不在配送范围内');
+        }*/
+        // 验证用户收货地址是否存在运费规则中
+        $goods['express_price']=0;
+        if ($intraRegion = $goods['delivery']->checkAddress($cityId)) {
+            $goods['express_price'] = $goods['delivery']->calcTotalFee($goods_num, $goods['goods_total_weight'], $cityId);
+        } else {
+            $exist_address && $this->setError("很抱歉，您的收货地址不在商品 [{$goods['goods_name']}] 的配送范围内");
         }
-
         // 计算配送费用
         $expressPrice = $intraRegion ?
             $goods['delivery']->calcTotalFee($goods_num, $goods_total_weight, $cityId) : 0;
@@ -210,6 +216,7 @@ class Order extends OrderModel
     {
         // 筛选条件
         $filter = [];
+        $filter['is_hidden'] =0;
         // 订单数据类型
         switch ($type) {
             case 'all':
@@ -279,6 +286,7 @@ class Order extends OrderModel
      */
     public function receipt()
     {
+        var_dump($this['goods']);exit;
         if ($this['delivery_status']['value'] == 10 || $this['receipt_status']['value'] == 20) {
             $this->error = '该订单不合法';
             return false;

@@ -113,5 +113,44 @@ class Order extends BaseModel
     {
         return self::get($order_id, ['goods.image', 'address']);
     }
+    //获得店铺上个月销售额
+    public function getLastMonthOrderSaleMoney($shop_id)
+    {
+        // 筛选条件
+        $filter = [];
+        $filter['is_hidden'] =0;
+        $filter['pay_status'] = 20;
+        $filter['delivery_status'] = 20;
+        $filter['receipt_status'] = 10;
+        $begin_time = strtotime(date('Y-m-01',strtotime('-1 month')));
+        $end_time =strtotime(date("Y-m-d 23:59:59", strtotime(-date('d').'day')));
+        return $this ->where('shop_id', '=', $shop_id)
+            ->where('order_status', '<>', 20)
+            ->where($filter)
+             ->whereBetween("receipt_time",[$begin_time,$end_time])
+            ->order(['create_time' => 'desc'])
+            ->sum("total_price");
+    }
+    //获得店铺上个月销售额对应的服务费
+    public function getLastMonthOrderServiceMoney($money)
+    {
+       if($money<200){
+           return 0;
+       }elseif($money>=200 && $money<600){
+           return 10;
+       }elseif($money>=600 && $money<1000){
+           return 20;
+       }else{
+           return 30;
+       }
+    }
+    //检测是否已经结清上个月
+    public function checkLastMonthOrderLog($shop_id)
+    {
+        $where['shop_id']=$shop_id;
+        $where['month']=date("Y-m");
+        $where['type']=0;
+        return db("shop_money_log")->where($where)->find();
 
+    }
 }

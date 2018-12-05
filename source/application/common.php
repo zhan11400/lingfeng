@@ -159,12 +159,29 @@ function check_mobile($mobile){
     return false;
 }
 
+/**
+ * 增加店铺余额记录并且改变余额
+ * @param $shop_id 店铺id
+ * @param $money 金额变动，减少时需是负数
+ *  @param $text 记录说明
+ *  @param $type 0订单结算，1提现，2扣除服务费
+ */
 function shop_money_log($shop_id,$money,$text,$type){
     $data['shop_id']=$shop_id;
     $data['money']=$money;
     $data['text']=$text;
     $data['type']=$type;
     $data['wxapp_id']=config("wxapp_id");
+    $data['month']=date("Y-m");
     $data['create_time']=time();
-    db("shop_money_log")->insert($data);
+    \think\Db::startTrans();
+    try {
+        db("shop_money_log")->insert($data);
+        db("shop")->where(['shop_id' => $shop_id])->setInc("money", $money);
+        \think\Db::commit();
+    }catch (Exception $e){
+        $e->getMessage();
+        \think\Db::rollback();
+    }
+
 }

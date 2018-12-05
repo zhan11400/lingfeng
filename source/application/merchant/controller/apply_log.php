@@ -19,10 +19,7 @@ class Finance extends Controller
 
     public function apply_log()
     {
-        $model=new \app\common\model\Finance();
-         $list= $model->getWithdrawalsList($this->shop_id);
-        $money= $model->getShopMoney($this->shop_id);
-        return $this->fetch('apply_log', compact('list','money'));
+        return $this->fetch('apply_log');
     }
 
 

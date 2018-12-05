@@ -35,10 +35,38 @@ class Finance extends BaseModel
                 if($item['type']==1){
                     $item['type']='店铺提现';
                 }
-                if($item['type']==3){
+                if($item['type']==2){
                     $item['type']='服务费';
                 }
                 return $item;
             });
+    }
+    public function getShopMoney($shop_id)
+    {
+        return $this->where(['shop_id'=>$shop_id])->value("money");
+    }
+
+    public function getWithdrawalsList($shop_id)
+    {
+        //echo $shop_id;
+       return  db("shop_withdrawals")->where(['shop_id'=>$shop_id])
+           // ->with(['shop'])
+            ->order('create_time desc')
+            ->paginate(10, false, [
+                'query' => Request::instance()->request()
+            ])
+            ->each(function($item,$key){
+                if($item['status']=='0'){
+                    $item['status_str']='待审核';
+                }
+                if($item['status']=='1'){
+                    $item['status_str']='已打款';
+                }
+                if($item['status']=='-1'){
+                    $item['status_str']='已拒绝';
+                }
+                return $item;
+            });
+
     }
 }

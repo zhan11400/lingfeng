@@ -22,7 +22,7 @@ class Driver
      */
     public function __construct($config)
     {
-        $this->config = $config;
+       $this->config = $config;
         // 实例化当前存储引擎
         $this->engine = $this->getEngineClass();
     }

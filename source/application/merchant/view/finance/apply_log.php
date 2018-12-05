@@ -4,51 +4,33 @@
         <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
             <div class="widget am-cf">
                 <div class="widget-head am-cf">
-                    <div class="widget-title am-cf">钱包记录</div>
+                    <div class="widget-title am-cf">提现记录</div>
                 </div>
                 <div class="widget-body am-fr">
-                    <div class="am-scrollable-horizontal am-u-sm-12">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                我的余额：<?= $money ?>
-                            </div>
-                        </div>
-                        <div class="btn-group">
-                            <?php if($money<=0): ?>
-                                <button type="button" class="btn btn-error">我要提现</button>
-
-                                <?php  else: ?>
-                                <button type="button" class="btn btn-success">我要提现</button>
-                           <?php endif; ?>
-
-                        </div>
-                        <div class="alert alert-warning">
-                            <a href="#" class="close" data-dismiss="alert">
-                                &times;
-                            </a>
-
-                        </div>
-                    </div>
                     <div class="am-scrollable-horizontal am-u-sm-12">
                         <table width="100%" class="am-table am-table-compact am-table-striped
                          tpl-table-black am-text-nowrap">
                             <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>姓名</th>
+                                <th>账号</th>
                                 <th>金额</th>
-                                <th>类型</th>
-                                <th>说明</th>
-                                <th>时间</th>
+                                <th>状态</th>
+                                <th>申请时间</th>
+                                <th>处理时间</th>
                             </tr>
                             </thead>
                             <tbody>
                             <?php if (!$list->isEmpty()): foreach ($list as $item): ?>
                                 <tr>
-                                    <td class="am-text-middle"><?= $item['log_id'] ?></td>
-                                    <td class="am-text-middle"><?= $item['money'] ?></td>
-                                    <td class="am-text-middle"><?= $item['type'] ?: '--' ?></td>
-                                    <td class="am-text-middle"><?= $item['text'] ?: '--' ?></td>
-                                    <td class="am-text-middle"><?= $item['create_time'] ?></td>
+                                    <td class="am-text-middle"><?= $item['id'] ?></td>
+                                    <td class="am-text-middle"><?= $item['user_name'] ?></td>
+                                    <td class="am-text-middle"><?= $item['account'] ?: '--' ?></td>
+                                    <td class="am-text-middle"><?= $item['money'] ?: '--' ?></td>
+                                    <td class="am-text-middle"><?= $item['status_str'] ?: '--' ?></td>
+                                    <td class="am-text-middle"><?= date("Y-m-d H:i:s",$item['create_time']) ?></td>
+                                    <td class="am-text-middle"><?= $item['check_time']?date("Y-m-d H:i:s",$item['check_time']):'-' ?></td>
                                 </tr>
                             <?php endforeach; else: ?>
                                 <tr>
