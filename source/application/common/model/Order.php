@@ -41,7 +41,14 @@ class Order extends BaseModel
     {
         return $this->hasOne('OrderAddress');
     }
-
+    /**
+     * 关联订单收货地址表
+     * @return \think\model\relation\HasOne
+     */
+    public function address2()
+    {
+        return $this->hasOne('OrderAddress','order_address_id','parent_id');
+    }
     /**
      * 关联用户表
      * @return \think\model\relation\BelongsTo

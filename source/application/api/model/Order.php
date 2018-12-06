@@ -65,7 +65,7 @@ class Order extends OrderModel
         // 验证用户收货地址是否存在运费规则中
         $goods['express_price']=0;
         if ($intraRegion = $goods['delivery']->checkAddress($cityId)) {
-            $goods['express_price'] = $goods['delivery']->calcTotalFee($goods_num, $goods['goods_total_weight'], $cityId);
+            $goods['express_price'] = $goods['delivery']->calcTotalFee($goods_num, $goods_total_weight, $cityId);
         } else {
             $exist_address && $this->setError("很抱歉，您的收货地址不在商品 [{$goods['goods_name']}] 的配送范围内");
         }
@@ -342,8 +342,18 @@ class Order extends OrderModel
         if (!$order = self::get([
             'order_id' => $order_id,
             'user_id' => $user_id,
-            'order_status' => ['<>', 20]
-        ], ['goods' => ['image', 'spec', 'goods'], 'address'])) {
+            'order_status' => ['<>', 20],
+            'parent_id' => ['>',0],
+        ], ['goods' => ['image', 'spec', 'goods'], 'address2'])) {
+            $order = self::get([
+                'order_id' => $order_id,
+                'user_id' => $user_id,
+                'order_status' => ['<>', 20],
+                'parent_id' =>0,
+            ], ['goods' => ['image', 'spec', 'goods'], 'address']);
+
+        }
+        if(!$order){
             throw new BaseException(['msg' => '订单不存在']);
         }
         return $order;

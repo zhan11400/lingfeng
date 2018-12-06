@@ -81,6 +81,10 @@ return [
                 'index' => 'finance/index',
             ],
             [
+                'name' => '我的余额',
+                'index' => 'finance/balance',
+            ],
+            [
                 'name' => '提现记录',
                 'index' => 'finance/apply_log',
             ],
@@ -100,6 +104,15 @@ return [
             [
                 'name' => '配送设置',
                 'index' => 'setting.delivery/index',
+                'uris' => [
+                    'setting.delivery/index',
+                    'setting.delivery/add',
+                    'setting.delivery/edit',
+                ],
+            ],
+            [
+                'name' => '支付宝配置',
+                'index' => 'setting.alipay/index',
                 'uris' => [
                     'setting.delivery/index',
                     'setting.delivery/add',

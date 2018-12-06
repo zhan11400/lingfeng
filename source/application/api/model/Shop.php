@@ -65,6 +65,6 @@ class Shop extends Model
         if($cate_id>0) {
             $where['plat_category_id'] = $cate_id;
         }
-        db("goods")->where($where)->order("sort desc")->paginate(10);
+     return     db("goods")->where($where)->order("sort desc")->paginate(10);
     }
 }

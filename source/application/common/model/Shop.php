@@ -73,4 +73,27 @@ class Shop extends Model
           });
         return $list;
     }
+
+    public function shopDetail($shop_id)
+    {
+        $item= $this->where(['shop_status'=>10,'is_delete'=>0,'shop_id'=>$shop_id])->cache(CACHE_TIME)->find();
+        if(!$item) return $item;
+
+        if($item['shop_status']==10) {
+            $item['shop_status_text'] = config("shop_status_up");
+        }else{
+            $item['shop_status_text'] = config("shop_status_down");
+        }
+        $image_ids=unserialize($item['shop_image']);
+        $where['file_id']=array('in',$image_ids);
+        $files= db("upload_file")->where($where)->cache(CACHE_TIME)->column("file_id,file_name");
+        foreach($files as $k=> $file_name){
+            $images[$k]['file_path'] =IMG_PATH.$file_name;
+            $images[$k]['image_id'] =$k;
+        }
+        $item['shop_image']=array_merge($images);
+        $item['shop_logo']= IMG_PATH.db("upload_file")->cache(CACHE_TIME)->where(['file_id'=>$item['shop_logo']])->value("file_name");
+        $item['shop_goods_num']= db("goods")->cache(CACHE_TIME)->where(['shop_id'=>$item['shop_id']])->count("goods_id");
+        return $item;
+    }
 }

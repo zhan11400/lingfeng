@@ -1,5 +1,7 @@
 <?php
 namespace app\merchant\controller;
+use app\common\model\Shop;
+use think\Db;
 
 /**
  * 后台首页
@@ -24,6 +26,45 @@ class Finance extends Controller
         $money= $model->getShopMoney($this->shop_id);
         return $this->fetch('apply_log', compact('list','money'));
     }
+    public function balance()
+    {
+        $model=new \app\common\model\Finance();
+        $money= $model->getShopMoney($this->shop_id);
+        return $this->fetch('balance', compact('money'));
+    }
+    public function apply()
+    {
+        if(request()->isAjax()){
+            $money=input("money");
+            if (preg_match('/^[0-9]+(.[0-9]{1,2})?$/', $money)) {
+                if($money<100){
+                    return $this->renderError('最低提现金额100');
+                }
+                $model=new \app\common\model\Finance();
+                $balance= $model->getShopMoney($this->shop_id);
+                if($balance<$money){
+                    return $this->renderError('余额不足');
+                }
+                $model_shop=new Shop();
+                $info=$model_shop->shopDetail($this->shop_id);
+                if(!$info['ali_name'] || !$info['ali_account']){
+                    return $this->renderError('请先配置提现的支付宝账号');
+                }
+                $data['user_name']=$info['ali_name'];
+                $data['account']=$info['ali_account'];
+                $data['money']=$money;
+                $data['status']='0';
+                $data['create_time']=time();
+                $data['shop_id']=$this->shop_id;
+                db("shop_withdrawals")->insert($data);
+                shop_money_log($this->shop_id,$money,'余额提现',1);
+                return $this->renderSuccess('提现成功，请等待后台审核');
+            }else{
+                return $this->renderError('金额输入有误');
+            }
+        }
 
 
+        return $this->fetch('balance', compact('money'));
+    }
 }

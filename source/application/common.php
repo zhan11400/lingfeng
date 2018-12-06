@@ -158,7 +158,15 @@ function check_mobile($mobile){
         return true;
     return false;
 }
-
+/**
+ * 检查邮箱地址格式
+ * @param $email 邮箱地址
+ */
+function check_email($email){
+    if(filter_var($email,FILTER_VALIDATE_EMAIL))
+        return true;
+    return false;
+}
 /**
  * 增加店铺余额记录并且改变余额
  * @param $shop_id 店铺id
@@ -177,7 +185,11 @@ function shop_money_log($shop_id,$money,$text,$type){
     \think\Db::startTrans();
     try {
         db("shop_money_log")->insert($data);
-        db("shop")->where(['shop_id' => $shop_id])->setInc("money", $money);
+        if($type==0) {
+            db("shop")->where(['shop_id' => $shop_id])->setInc("money", $money);
+        }else{
+            db("shop")->where(['shop_id' => $shop_id])->setDec("money", $money);
+        }
         \think\Db::commit();
     }catch (Exception $e){
         $e->getMessage();

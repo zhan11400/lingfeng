@@ -18,7 +18,7 @@ class Finance extends BaseModel
      */
     public function shop()
     {
-        return $this->belongsTo('shop',"shop_id","shop_id");
+        return $this->hasOne('shop',"shop_id","shop_id");
     }
     public function getList($shop_id)
     {
@@ -43,14 +43,19 @@ class Finance extends BaseModel
     }
     public function getShopMoney($shop_id)
     {
-        return $this->where(['shop_id'=>$shop_id])->value("money");
+        return  db("shop")->where(['shop_id'=>$shop_id])->value("money");
     }
 
-    public function getWithdrawalsList($shop_id)
+    public function getWithdrawalsList($shop_id=0)
     {
         //echo $shop_id;
-       return  db("shop_withdrawals")->where(['shop_id'=>$shop_id])
-           // ->with(['shop'])
+        $where=[];
+        if($shop_id>0){
+            $where['shop_id']=$shop_id;
+        }
+       return  db("shop_withdrawals")
+           ->where($where)
+            ->with(['shop'])
             ->order('create_time desc')
             ->paginate(10, false, [
                 'query' => Request::instance()->request()
