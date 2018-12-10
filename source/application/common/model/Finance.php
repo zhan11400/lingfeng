@@ -90,7 +90,7 @@ class Finance extends BaseModel
         $request = new \AlipayFundTransToaccountTransferRequest ();
         $account=$data['account'];
         $amount=$data['paymoney'];
-        $show_name='广东帷策互联网科技有限公司';
+        $show_name='';
         $realname=$data['user_name'];
         $data=array(
             "out_biz_no"=>$data['id'].rand(1,99999),//商户转账唯一订单号。发起转账来源方定义的转账单据ID，用于将转账回执通知给来源方。
@@ -110,10 +110,11 @@ class Finance extends BaseModel
         $resultCode = $result->$responseNode->code;
 
         if(!empty($resultCode)&&$resultCode == 10000){
-            return true;
+            $msg['code']=1;
         } else {
+            $msg['code']=0;
             $msg['message']=$result->alipay_fund_trans_toaccount_transfer_response->sub_msg;
-            return $msg;
         }
+        return $msg;
     }
 }
