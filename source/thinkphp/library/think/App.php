@@ -150,8 +150,8 @@ class App
         } elseif (!is_null($data)) {
             // 默认自动识别响应输出类型
             $type = $request->isAjax() ?
-            Config::get('default_ajax_return') :
-            Config::get('default_return_type');
+                Config::get('default_ajax_return') :
+                Config::get('default_return_type');
 
             $response = Response::create($data, $type);
         } else {
@@ -179,7 +179,7 @@ class App
             Loader::addNamespace(self::$namespace, APP_PATH);
 
             // 初始化应用
-            $config       = self::init();
+            $config = self::init();
             self::$suffix = $config['class_suffix'];
 
             // 应用调试模式
@@ -254,7 +254,7 @@ class App
 
             // 读取扩展配置文件
             if (is_dir(CONF_PATH . $module . 'extra')) {
-                $dir   = CONF_PATH . $module . 'extra';
+                $dir = CONF_PATH . $module . 'extra';
                 $files = scandir($dir);
                 foreach ($files as $file) {
                     if ('.' . pathinfo($file, PATHINFO_EXTENSION) === CONF_EXT) {
@@ -292,8 +292,8 @@ class App
     /**
      * 设置当前请求的调度信息
      * @access public
-     * @param array|string  $dispatch 调度信息
-     * @param string        $type     调度类型
+     * @param array|string $dispatch 调度信息
+     * @param string $type 调度类型
      * @return void
      */
     public static function dispatch($dispatch, $type = 'module')
@@ -305,13 +305,13 @@ class App
      * 执行函数或者闭包方法 支持参数调用
      * @access public
      * @param string|array|\Closure $function 函数或者闭包
-     * @param array                 $vars     变量
+     * @param array $vars 变量
      * @return mixed
      */
     public static function invokeFunction($function, $vars = [])
     {
         $reflect = new \ReflectionFunction($function);
-        $args    = self::bindParams($reflect, $vars);
+        $args = self::bindParams($reflect, $vars);
 
         // 记录执行信息
         self::$debug && Log::record('[ RUN ] ' . $reflect->__toString(), 'info');
@@ -323,13 +323,13 @@ class App
      * 调用反射执行类的方法 支持参数绑定
      * @access public
      * @param string|array $method 方法
-     * @param array        $vars   变量
+     * @param array $vars 变量
      * @return mixed
      */
     public static function invokeMethod($method, $vars = [])
     {
         if (is_array($method)) {
-            $class   = is_object($method[0]) ? $method[0] : self::invokeClass($method[0]);
+            $class = is_object($method[0]) ? $method[0] : self::invokeClass($method[0]);
             $reflect = new \ReflectionMethod($class, $method[1]);
         } else {
             // 静态方法
@@ -347,14 +347,14 @@ class App
      * 调用反射执行类的实例化 支持依赖注入
      * @access public
      * @param string $class 类名
-     * @param array  $vars  变量
+     * @param array $vars 变量
      * @return mixed
      */
     public static function invokeClass($class, $vars = [])
     {
-        $reflect     = new \ReflectionClass($class);
+        $reflect = new \ReflectionClass($class);
         $constructor = $reflect->getConstructor();
-        $args        = $constructor ? self::bindParams($constructor, $vars) : [];
+        $args = $constructor ? self::bindParams($constructor, $vars) : [];
 
         return $reflect->newInstanceArgs($args);
     }
@@ -363,7 +363,7 @@ class App
      * 绑定参数
      * @access private
      * @param \ReflectionMethod|\ReflectionFunction $reflect 反射类
-     * @param array                                 $vars    变量
+     * @param array $vars 变量
      * @return array
      */
     private static function bindParams($reflect, $vars = [])
@@ -371,8 +371,8 @@ class App
         // 自动获取请求变量
         if (empty($vars)) {
             $vars = Config::get('url_param_type') ?
-            Request::instance()->route() :
-            Request::instance()->param();
+                Request::instance()->route() :
+                Request::instance()->param();
         }
 
         $args = [];
@@ -392,19 +392,19 @@ class App
     /**
      * 获取参数值
      * @access private
-     * @param \ReflectionParameter  $param 参数
-     * @param array                 $vars  变量
-     * @param string                $type  类别
+     * @param \ReflectionParameter $param 参数
+     * @param array $vars 变量
+     * @param string $type 类别
      * @return array
      */
     private static function getParamValue($param, &$vars, $type)
     {
-        $name  = $param->getName();
+        $name = $param->getName();
         $class = $param->getClass();
 
         if ($class) {
             $className = $class->getName();
-            $bind      = Request::instance()->$name;
+            $bind = Request::instance()->$name;
 
             if ($bind instanceof $className) {
                 $result = $bind;
@@ -418,8 +418,8 @@ class App
                 }
 
                 $result = method_exists($className, 'instance') ?
-                $className::instance() :
-                new $className;
+                    $className::instance() :
+                    new $className;
             }
         } elseif (1 == $type && !empty($vars)) {
             $result = array_shift($vars);
@@ -438,7 +438,7 @@ class App
      * 执行调用分发
      * @access protected
      * @param array $dispatch 调用信息
-     * @param array $config   配置信息
+     * @param array $config 配置信息
      * @return Response|mixed
      * @throws \InvalidArgumentException
      */
@@ -485,9 +485,9 @@ class App
     /**
      * 执行模块
      * @access public
-     * @param array $result  模块/控制器/操作
-     * @param array $config  配置参数
-     * @param bool  $convert 是否自动转换控制器和操作名
+     * @param array $result 模块/控制器/操作
+     * @param array $config 配置参数
+     * @param bool $convert 是否自动转换控制器和操作名
      * @return mixed
      * @throws HttpException
      */
@@ -501,8 +501,8 @@ class App
 
         if ($config['app_multi_module']) {
             // 多模块部署
-            $module    = strip_tags(strtolower($result[0] ?: $config['default_module']));
-            $bind      = Route::getBind('module');
+            $module = strip_tags(strtolower($result[0] ?: $config['default_module']));
+            $bind = Route::getBind('module');
             $available = false;
 
             if ($bind) {
@@ -510,7 +510,7 @@ class App
                 list($bindModule) = explode('/', $bind);
 
                 if (empty($result[0])) {
-                    $module    = $bindModule;
+                    $module = $bindModule;
                     $available = true;
                 } elseif ($module == $bindModule) {
                     $available = true;
@@ -551,6 +551,9 @@ class App
 
         // 获取控制器名
         $controller = strip_tags($result[1] ?: $config['default_controller']);
+        if (!preg_match('/^[A-Za-z](\w)*$/', $controller)) {
+            throw new HttpException(404, 'controller not exists:' . $controller);
+        }
         $controller = $convert ? strtolower($controller) : $controller;
 
         // 获取操作名
@@ -586,9 +589,9 @@ class App
             // 执行操作方法
             $call = [$instance, $action];
             // 严格获取当前操作方法名
-            $reflect    = new \ReflectionMethod($instance, $action);
+            $reflect = new \ReflectionMethod($instance, $action);
             $methodName = $reflect->getName();
-            $suffix     = $config['action_suffix'];
+            $suffix = $config['action_suffix'];
             $actionName = $suffix ? substr($methodName, 0, -strlen($suffix)) : $methodName;
             $request->action($actionName);
 
@@ -610,14 +613,14 @@ class App
      * URL路由检测（根据PATH_INFO)
      * @access public
      * @param  \think\Request $request 请求实例
-     * @param  array          $config  配置信息
+     * @param  array $config 配置信息
      * @return array
      * @throws \think\Exception
      */
     public static function routeCheck($request, array $config)
     {
-        $path   = $request->path();
-        $depr   = $config['pathinfo_depr'];
+        $path = $request->path();
+        $depr = $config['pathinfo_depr'];
         $result = false;
 
         // 路由检测
@@ -641,7 +644,7 @@ class App
 
             // 路由检测（根据路由定义返回不同的URL调度）
             $result = Route::check($request, $path, $depr, $config['url_domain_deploy']);
-            $must   = !is_null(self::$routeMust) ? self::$routeMust : $config['url_route_must'];
+            $must = !is_null(self::$routeMust) ? self::$routeMust : $config['url_route_must'];
 
             if ($must && false === $result) {
                 // 路由无效
@@ -661,12 +664,12 @@ class App
      * 设置应用的路由检测机制
      * @access public
      * @param  bool $route 是否需要检测路由
-     * @param  bool $must  是否强制检测路由
+     * @param  bool $must 是否强制检测路由
      * @return void
      */
     public static function route($route, $must = false)
     {
         self::$routeCheck = $route;
-        self::$routeMust  = $must;
+        self::$routeMust = $must;
     }
 }
