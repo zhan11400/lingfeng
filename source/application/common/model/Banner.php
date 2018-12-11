@@ -17,15 +17,16 @@ class Banner extends BaseModel
 
     public function getList($where=[])
     {
-        $where['status']=1;
-        return $this->where($where)->order("sort desc")->paginate(20);
+        return $this->where($where)
+            ->with("uploadFile")
+            ->order("sort desc")->paginate(20);
     }
 
     /**
      * 关联图片表
      * @return \think\model\relation\HasMany
      */
-    public function image()
+    public function uploadFile()
     {
         return $this->belongsTo('uploadFile','image','file_id');
     }
@@ -34,7 +35,7 @@ class Banner extends BaseModel
         $where['status']=1;
         $where['banner_id']=$id;
         return $this->where($where)
-            ->with("image")
+            ->with("uploadFile")
             ->find();
     }
     /**
@@ -52,8 +53,12 @@ class Banner extends BaseModel
         // 开启事务
         Db::startTrans();
         try {
-            // 添加店铺
-            $this->allowField(true)->save($data);
+            if(isset($data['banner_id']) && !empty($data['banner_id'])){
+                $this->where(['banner_id'=>$data['banner_id']])->update($data);
+            }else {
+                // 添加店铺
+                $this->allowField(true)->save($data);
+            }
             Db::commit();
             return true;
         } catch (\Exception $e) {

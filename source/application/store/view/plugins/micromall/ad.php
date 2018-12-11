@@ -9,7 +9,7 @@
                     <div class="am-form-group">
                         <div class="am-btn-toolbar">
                             <div class="am-btn-group am-btn-group-xs">
-                                <a class="am-btn am-btn-default am-btn-success am-radius" href="<?= url('wxapp.page/add')?>">
+                                <a class="am-btn am-btn-default am-btn-success am-radius" href="<?= url('plugins.micromall/add')?>">
                                     <span class="am-icon-plus"></span> 新增广告
                                 </a>
                             </div>
@@ -34,7 +34,7 @@
                                     <td class="am-text-middle"><?= $item['banner_id'] ?></td>
                                     <td class="am-text-middle"><?= $item['title'] ?></td>
                                     <td class="am-text-middle"><img height="80" src="<?= $item['uploadFile']['file_path']?>"></td>
-                                    <td class="am-text-middle"><?= $item['status'] ?'隐藏': '展示'  ?></td>
+                                    <td class="am-text-middle"><?= $item['status'] ?'展示': '隐藏' ?></td>
                                     <td class="am-text-middle"><?= $item['sort'] ?: '--' ?></td>
                                     <td class="am-text-middle"><?= $item['create_time'] ?></td>
                                     <td class="am-text-middle">
@@ -72,7 +72,7 @@
 <script>
     $(function () {
         // 删除元素
-        var url = "<?= url('wxapp.page/ad_del') ?>";
+        var url = "<?= url('plugins.micromall/ad_del') ?>";
         $('.item-delete').delete('id', url);
 
     });

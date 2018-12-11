@@ -7,6 +7,7 @@ use app\api\model\UserApply;
 use app\api\model\WxappPage;
 use app\api\model\Goods as GoodsModel;
 use app\api\validate\BaseValidate;
+use app\common\model\Banner;
 use think\Cache;
 use think\Validate;
 
@@ -63,5 +64,15 @@ class Index extends Controller
             return $this->renderError($model->getError());
         }
         return $this->renderSuccess('申请成功，请耐心等候工作人员与你联系');
+    }
+    //首页广告
+
+    public function ad($type=0)
+    {
+        $model=new Banner();
+        $where['type']=$type;//0首页广告，1微商城轮播，2微商城四宫格
+        $where['status']=1;
+        $list=$model->getList($where);
+        return $this->renderSuccess(compact('list'));
     }
 }

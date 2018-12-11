@@ -81,8 +81,9 @@ class Shop extends Controller
      * 店铺详情
      */
     public function shop_detail($shop_id){
-		$user=$this->getUser();   // 用户信息
-	$user_id=$user->user_id;
+	//	$user=$this->getUser();   // 用户信息
+	  //  $user_id=$user->user_id;
+        $user_id=1;
         $model = new apiShop;
         $shop=$model->detail($shop_id);
         if(!$shop){

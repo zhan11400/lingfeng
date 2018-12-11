@@ -3,18 +3,9 @@
         <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
             <div class="widget am-cf">
                 <div class="widget-head am-cf">
-                    <div class="widget-title am-cf">广告列表</div>
+                    <div class="widget-title am-cf">四宫格</div>
                 </div>
                 <div class="widget-body am-fr">
-                    <div class="am-form-group">
-                        <div class="am-btn-toolbar">
-                            <div class="am-btn-group am-btn-group-xs">
-                                <a class="am-btn am-btn-default am-btn-success am-radius" href="<?= url('wxapp.page/add')?>">
-                                    <span class="am-icon-plus"></span> 新增广告
-                                </a>
-                            </div>
-                        </div>
-                    </div>
                     <div class="am-scrollable-horizontal am-u-sm-12">
                         <table width="100%" class="am-table am-table-compact am-table-striped
                          tpl-table-black am-text-nowrap">
@@ -34,7 +25,7 @@
                                     <td class="am-text-middle"><?= $item['banner_id'] ?></td>
                                     <td class="am-text-middle"><?= $item['title'] ?></td>
                                     <td class="am-text-middle"><img height="80" src="<?= $item['uploadFile']['file_path']?>"></td>
-                                    <td class="am-text-middle"><?= $item['status'] ?'隐藏': '展示'  ?></td>
+                                    <td class="am-text-middle"><?= $item['status'] ?'展示': '隐藏' ?></td>
                                     <td class="am-text-middle"><?= $item['sort'] ?: '--' ?></td>
                                     <td class="am-text-middle"><?= $item['create_time'] ?></td>
                                     <td class="am-text-middle">
@@ -42,10 +33,6 @@
                                             <a href="<?= url('wxapp.page/add',
                                                 ['id' => $item['banner_id']]) ?>">
                                                 <i class="am-icon-pencil"></i> 编辑
-                                            </a>
-                                            <a href="javascript:;" class="item-delete tpl-table-black-operation-del"
-                                               data-id="<?= $item['banner_id'] ?>">
-                                                <i class="am-icon-trash"></i> 删除
                                             </a>
                                         </div>
                                     </td>
@@ -69,12 +56,4 @@
         </div>
     </div>
 </div>
-<script>
-    $(function () {
-        // 删除元素
-        var url = "<?= url('wxapp.page/ad_del') ?>";
-        $('.item-delete').delete('id', url);
-
-    });
-</script>
 

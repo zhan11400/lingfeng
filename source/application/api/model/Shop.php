@@ -53,7 +53,16 @@ class Shop extends Model
             $images[$k]['file_path'] =IMG_PATH.$file_name;
             $images[$k]['image_id'] =$k;
         }
+
+        $image_ids=unserialize($item['pictures']);
+        $where['file_id']=array('in',$image_ids);
+        $files= db("upload_file")->where($where)->cache(CACHE_TIME)->column("file_id,file_name");
+        foreach($files as $k=> $file_name){
+            $image[$k]['file_path'] =IMG_PATH.$file_name;
+            $image[$k]['image_id'] =$k;
+        }
         $item['shop_image']=array_merge($images);
+        $item['pictures']=array_merge($image);
         $item['shop_logo']= IMG_PATH.db("upload_file")->cache(CACHE_TIME)->where(['file_id'=>$item['shop_logo']])->value("file_name");
         $item['shop_goods_num']= db("goods")->cache(CACHE_TIME)->where(['shop_id'=>$item['shop_id']])->count("goods_id");
         return $item;

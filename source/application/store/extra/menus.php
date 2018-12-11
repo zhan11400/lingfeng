@@ -220,16 +220,12 @@ return [
                 'submenu' => [
                     [
                         'name' => '轮播',
-                        'index' => 'plugins.Micromall/index',
+                        'index' => 'plugins.micromall/ad',
                     ],
                     [
-                        'name' => '店铺入驻',
-                        'index' => 'plugins.user_apply/shop_apply',
-                    ],
-                    [
-                        'name' => '广告入驻',
-                        'index' => 'plugins.user_apply/ad_apply',
-                    ],
+                        'name' => '四宫格',
+                        'index' => 'plugins.micromall/banner',
+                    ]
                 ]
             ]
         ]

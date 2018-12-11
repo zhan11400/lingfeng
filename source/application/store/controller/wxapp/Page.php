@@ -57,7 +57,7 @@ class Page extends Controller
             $data=input("ad/a");
             $data['type']=0;//首页广告
             if($model->add($data)){
-                return $this->renderSuccess('操作成功');
+                return $this->renderSuccess('操作成功',url('wxapp.page/ad'));
             }
             $error = $model->getError() ?: '操作失败';
             return $this->renderError($error);
@@ -65,8 +65,19 @@ class Page extends Controller
 
         $id=input("id");
         $info=$model->getDetail($id);
-        echo '<pre>';
-        var_dump($info);exit;
+       // var_dump($info);
         return $this->fetch('add',compact("info"));
+    }
+    public function ad_del()
+    {
+        $model=new Banner();
+        $id=input("id");
+        $where['banner_id']=$id;
+        $res=$model->where($where)->delete();
+        if($res){
+            return $this->renderSuccess('操作成功');
+        }
+        $error = $model->getError() ?: '操作失败';
+        return $this->renderError($error);
     }
 }
