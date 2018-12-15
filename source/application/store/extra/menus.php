@@ -125,6 +125,10 @@ return [
                         'index' => 'wxapp.page/home'
                     ],
                     [
+                        'name' => '首页广告',
+                        'index' => 'wxapp.page/ad'
+                    ],
+                    [
                         'name' => '页面链接',
                         'index' => 'wxapp.page/links'
                     ],
@@ -209,7 +213,21 @@ return [
                     'index' => 'plugins.user_apply/ad_apply',
                 ],
             ]
-        ]
+        ],
+            [
+                'name' => '微商城',
+                'active' => false,
+                'submenu' => [
+                    [
+                        'name' => '轮播',
+                        'index' => 'plugins.micromall/ad',
+                    ],
+                    [
+                        'name' => '四宫格',
+                        'index' => 'plugins.micromall/banner',
+                    ]
+                ]
+            ]
         ]
     ],
     'setting' => [

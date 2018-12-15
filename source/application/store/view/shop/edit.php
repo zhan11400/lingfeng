@@ -147,7 +147,30 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="am-form-group">
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">环境图片 </label>
+                                <div class="am-u-sm-9 am-u-end">
+                                    <div class="am-form-file">
+                                        <button type="button"
+                                                class="upload-file2 am-btn am-btn-secondary am-radius">
+                                            <i class="am-icon-cloud-upload"></i> 选择图片
+                                        </button>
+                                        <div class="uploader-list am-cf">
+                                            <?php foreach ($model['pictures'] as $key => $item): ?>
+                                                <div class="file-item">
+                                                    <img src="<?= $item['file_path'] ?>">
+                                                    <input type="hidden" name="shop[pictures][]"
+                                                           value="<?= $item['image_id'] ?>">
+                                                    <i class="iconfont icon-shanchu file-item-delete"></i>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                    <div class="help-block am-margin-top-sm">
+                                        <small>尺寸750x750像素以上，大小2M以下 (可拖拽图片调整显示顺序 )</small>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="widget-head am-cf">
                                 <div class="widget-title am-fl">商家说明</div>
@@ -264,6 +287,11 @@
         // 选择图片
         $('.upload-file').selectImages({
             name: 'shop[images][]'
+            , multiple: true
+        });
+        // 选择环境图片
+        $('.upload-file2').selectImages({
+            name: 'shop[pictures][]'
             , multiple: true
         });
         // 选择logo

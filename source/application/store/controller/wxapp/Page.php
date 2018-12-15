@@ -2,6 +2,7 @@
 
 namespace app\store\controller\wxapp;
 
+use app\common\model\Banner;
 use app\store\controller\Controller;
 use app\store\model\WxappPage as WxappPageModel;
 
@@ -39,5 +40,44 @@ class Page extends Controller
     {
         return $this->fetch('links');
     }
+    /**
+     * 页面广告图
+     * @return mixed
+     */
+    public function ad()
+    {
+        $model=new Banner();
+        $where['type']=0;
+        $list=$model->getList($where);
+        return $this->fetch('ad',compact("list"));
+    }
+    public function add()
+    {    $model=new Banner();
+        if(request()->isPost()){
+            $data=input("ad/a");
+            $data['type']=0;//首页广告
+            if($model->add($data)){
+                return $this->renderSuccess('操作成功',url('wxapp.page/ad'));
+            }
+            $error = $model->getError() ?: '操作失败';
+            return $this->renderError($error);
+        }
 
+        $id=input("id");
+        $info=$model->getDetail($id);
+       // var_dump($info);
+        return $this->fetch('add',compact("info"));
+    }
+    public function ad_del()
+    {
+        $model=new Banner();
+        $id=input("id");
+        $where['banner_id']=$id;
+        $res=$model->where($where)->delete();
+        if($res){
+            return $this->renderSuccess('操作成功');
+        }
+        $error = $model->getError() ?: '操作失败';
+        return $this->renderError($error);
+    }
 }

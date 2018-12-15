@@ -57,6 +57,15 @@ class Shop extends Controller
                $images[$k]['image_id'] =$k;
            }
             $model->image =$images;
+            $image_ids=unserialize($model->pictures);
+            $where['file_id']=array('in',$image_ids);
+            $files= db("upload_file")->where($where)->column("file_id,file_name");
+            $images=[];
+            foreach($files as $k=> $file_name){
+                $images[$k]['file_path'] =IMG_PATH.$file_name;
+                $images[$k]['image_id'] =$k;
+            }
+            $model->pictures =$images;
             $model->shop_logo_img=IMG_PATH.db("upload_file")->where(['file_id'=>$model->shop_logo])->value("file_name");
             return $this->fetch('edit', compact('model', 'catgory'));
         }

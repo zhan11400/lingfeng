@@ -43,6 +43,9 @@ class Shop extends Model
         } elseif ($sortType === 'new') {
             $sort = ['shop_id' => 'desc'];
          //  $sort = $sortPrice ? ['goods_max_price' => 'desc'] : ['goods_min_price'];
+        } elseif ($sortType === 'collect') {
+            $sort = ['collect_num' => 'desc'];
+            //  $sort = $sortPrice ? ['goods_max_price' => 'desc'] : ['goods_min_price'];
         }
         $db_add=[
             'file'=>db("upload_file"),
