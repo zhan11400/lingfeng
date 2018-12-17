@@ -40,6 +40,23 @@ class Micromall extends Controller
         // var_dump($info);
         return $this->fetch('add',compact("info"));
     }
+    public function fourPalaceEdit()
+    {    $model=new Banner();
+        if(request()->isPost()){
+            $data=input("ad/a");
+            $data['type']=2;//四宫格
+            if($model->add($data)){
+                return $this->renderSuccess('操作成功',url('plugins.micromall/banner'));
+            }
+            $error = $model->getError() ?: '操作失败';
+            return $this->renderError($error);
+        }
+
+        $id=input("id");
+        $info=$model->getDetail($id);
+        // var_dump($info);
+        return $this->fetch('fouredit',compact("info"));
+    }
     public function ad_del()
     {
         $model=new Banner();

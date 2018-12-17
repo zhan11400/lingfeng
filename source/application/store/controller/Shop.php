@@ -13,6 +13,7 @@ class Shop extends Controller
     {
         $model = new ShopModel;
         $list=$model->getList($status = null, $category_id = 0, $search = '', $sortType = 'all');
+		//var_dump($list);
         $catgory = ShopCategory::getCacheTree();
       //  dump($list);
        return $this->fetch('index',compact('catgory', 'list'));
@@ -30,8 +31,10 @@ class Shop extends Controller
         }
         $model = new ShopModel;
         if ($model->add($this->postData('shop'))) {
-            return $this->renderSuccess('添加成功', url('shop/index'));
+			 $this->redirect(base_url().url('shop/index'));
+           // return $this->renderSuccess('添加成功', url('shop/index'));
         }
+		 $this->error('操作失败');
         $error = $model->getError() ?: '添加失败';
         return $this->renderError($error);
     }

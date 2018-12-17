@@ -3,6 +3,7 @@
 namespace app\common\model;
 
 use think\Hook;
+use think\Log;
 
 /**
  * 订单模型
@@ -123,7 +124,23 @@ class PtOrder extends BaseModel
      */
     public static function detail($order_id)
     {
-        return self::get($order_id, ['goods.image', 'address']);
+        $order = self::get($order_id, ['goods.image', 'address']);
+
+        $pid = empty($order['parent_id']) ? $order['order_no'] : $order['parent_id'];
+
+
+        if (!$order['group'] = self::where('order_no|parent_id', $pid)->where('pt_status','>',20)->select()) {
+            throw new BaseException(['msg' => '无法找到团信息']);
+        }
+//todo how to use with
+        foreach ($order['group'] as $i => $v) {
+            $user = (new \app\store\model\User())->where('user_id', $v['user_id'])->field('avatarUrl,nickName,user_id')->find()->getData();
+            $order['group'][$i]['avatarUrl'] = $user['avatarUrl'];
+            $order['group'][$i]['nickName'] = $user['nickName'];
+            $order['group'][$i]['user_id'] = $user['user_id'];
+
+        }
+        return $order;
     }
 
 }

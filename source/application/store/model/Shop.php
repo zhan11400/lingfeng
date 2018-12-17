@@ -30,7 +30,13 @@ class Shop extends \app\common\model\Shop
             $this->error = '请上传店铺logo图片';
             return false;
         }
+		 if (!isset($data['pictures']) || empty($data['pictures'])) {
+            $this->error = '请上传环境图片';
+            return false;
+        }
         $data['content'] = isset($data['content']) ? $data['content'] : '';
+		$data['pictures']=serialize($data['pictures']);
+		$data['wxapp_id']= config('wxapp_id');
         $data['shop_image']=serialize($data['images']);
         unset($data['images']);
         // 开启事务
@@ -67,6 +73,7 @@ class Shop extends \app\common\model\Shop
 
         $data['content'] = isset($data['content']) ? $data['content'] : '';
         $data['shop_image']=serialize($data['images']);
+		 $data['wxapp_id']= self::$wxapp_id;
         $data['pictures']=serialize($data['pictures']);
         $data['update_time']=time();
         unset($data['images']);

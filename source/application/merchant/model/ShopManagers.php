@@ -22,7 +22,8 @@ class ShopManagers extends Model
      */
     public function login($data)
     {
-        $user = self::useGlobalScope(false)->where([
+        $user = self::useGlobalScope(false)
+            ->where([
             'mobile' => $data['user_name'],
         ])->find();
         if (!$user) {
@@ -40,6 +41,7 @@ class ShopManagers extends Model
                 'user_name' => $user['real_name'],
             ],
             'shop_id' => $user['shop_id'],
+            'wxapp_id' => $user['wxapp_id'],
             'is_login' => true,
         ]);
         session("yoshop_store",null);

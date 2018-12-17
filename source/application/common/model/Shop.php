@@ -12,9 +12,8 @@ use think\Request;
  * Class Category
  * @package app\store\model
  */
-class Shop extends Model
+class Shop extends BaseModel
 {
-    public static $wxapp_id;
     protected $name = 'shop';
     /**
      * 获取商品列表
@@ -51,6 +50,7 @@ class Shop extends Model
             'file'=>db("upload_file"),
             'goods'=>db("goods"),
         ];
+		
       $list= $this->alias("s")->join("shop_category sc","sc.category_id=s.shop_cate_id","LEFT")
           ->field("s.*,sc.name")
           ->where($filter)->order($sort)
@@ -74,12 +74,13 @@ class Shop extends Model
               $item['shop_goods_num']= $db_add['goods']->cache(CACHE_TIME)->where(['shop_id'=>$item['shop_id']])->count("goods_id");
               return $item;
           });
+
         return $list;
     }
 
     public function shopDetail($shop_id)
     {
-        $item= $this->where(['shop_status'=>10,'is_delete'=>0,'shop_id'=>$shop_id])->cache(CACHE_TIME)->find();
+        $item= $this->where(['shop_status'=>10,'is_delete'=>0,'shop_id'=>$shop_id])->find();
         if(!$item) return $item;
 
         if($item['shop_status']==10) {

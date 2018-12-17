@@ -49,6 +49,7 @@ class Shop extends Model
         $image_ids=unserialize($item['shop_image']);
         $where['file_id']=array('in',$image_ids);
         $files= db("upload_file")->where($where)->cache(CACHE_TIME)->column("file_id,file_name");
+		$image=[];
         foreach($files as $k=> $file_name){
             $images[$k]['file_path'] =IMG_PATH.$file_name;
             $images[$k]['image_id'] =$k;

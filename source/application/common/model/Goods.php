@@ -144,6 +144,7 @@ class Goods extends BaseModel
      */
     public function getList($status = null, $category_id = 0, $search = '', $sortType = 'all', $sortPrice = false)
     {
+        var_dump(self::$wxapp_id);exit;
         // 筛选条件
         $filter = [];
         $category_id > 0 && $filter['category_id'] = $category_id;
