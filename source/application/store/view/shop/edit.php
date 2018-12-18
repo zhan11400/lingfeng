@@ -100,7 +100,9 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="widget-head am-cf">
+                                <div class="widget-title am-fl">图片</div>
+                            </div>
                             <div class="am-form-group">
                                 <label class="am-u-sm-3 am-u-lg-2 am-form-label">店铺logo </label>
                                 <div class="am-u-sm-9 am-u-end">
@@ -203,11 +205,26 @@
                                 </div>
                             </div>
                             <div class="am-form-group">
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">是否新店 </label>
+                                <div class="am-u-sm-9 am-u-end">
+                                    <label class="am-radio-inline">
+                                        <input type="radio" name="shop[is_new]" value="1" data-am-ucheck
+                                            <?= $model['is_new'] == 1 ? 'checked' : '' ?>>
+                                        是
+                                    </label>
+                                    <label class="am-radio-inline">
+                                        <input type="radio" name="shop[is_new]" value="0" data-am-ucheck
+                                            <?= $model['is_new'] == 0 ? 'checked' : '' ?>  >
+                                        否
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
                                 <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">店铺排序 </label>
                                 <div class="am-u-sm-9 am-u-end">
                                     <input type="number" class="tpl-form-input" name="shop[shop_sort]"
                                            value="<?= $model['shop_sort'] ?>" required>
-                                    <small>数字越小越靠前</small>
+                                    <small>数字越大越靠前</small>
                                 </div>
                             </div>
 

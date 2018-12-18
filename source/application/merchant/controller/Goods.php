@@ -36,8 +36,9 @@ class Goods extends Controller
             // 商品分类
             $catgory = Category::getCacheTree();
             // 配送模板
+            $platformcatgory= Category::getPlatformALL();
             $delivery = Delivery::getAll();
-            return $this->fetch('add', compact('catgory', 'delivery'));
+            return $this->fetch('add', compact('catgory', 'delivery','platformcatgory'));
         }
         $model = new GoodsModel;
         if ($model->add($this->postData('goods'))) {

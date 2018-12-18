@@ -2,6 +2,7 @@
 
 namespace app\api\model;
 
+use app\common\model\BaseModel;
 use think\Cache;
 use think\Db;
 use think\Model;
@@ -12,9 +13,8 @@ use think\Request;
  * Class Category
  * @package app\store\model
  */
-class Shop extends Model
+class Shop extends \app\common\model\Shop
 {
-    public static $wxapp_id;
     protected $name = 'shop';
     /**
      * 设置错误信息
@@ -38,7 +38,7 @@ class Shop extends Model
 
     public function detail($shop_id)
     {
-        $item= $this->where(['shop_status'=>10,'is_delete'=>0,'shop_id'=>$shop_id])->cache(CACHE_TIME)->find();
+        $item= $this->where(['is_delete'=>0,'shop_id'=>$shop_id])->cache(CACHE_TIME)->find();
         if(!$item) return $item;
 
         if($item['shop_status']==10) {
@@ -50,17 +50,17 @@ class Shop extends Model
         $where['file_id']=array('in',$image_ids);
         $files= db("upload_file")->where($where)->cache(CACHE_TIME)->column("file_id,file_name");
 		$image=[];
-        foreach($files as $k=> $file_name){
-            $images[$k]['file_path'] =IMG_PATH.$file_name;
-            $images[$k]['image_id'] =$k;
+        foreach($image_ids as $k=> $v){
+            $images[$k]['file_path'] =IMG_PATH.$files[$v];
+            $images[$k]['image_id'] =$v;
         }
 
         $image_ids=unserialize($item['pictures']);
         $where['file_id']=array('in',$image_ids);
         $files= db("upload_file")->where($where)->cache(CACHE_TIME)->column("file_id,file_name");
-        foreach($files as $k=> $file_name){
-            $image[$k]['file_path'] =IMG_PATH.$file_name;
-            $image[$k]['image_id'] =$k;
+        foreach($image_ids as $k=> $v){
+            $image[$k]['file_path'] =IMG_PATH.$files[$v];
+            $image[$k]['image_id'] =$v;
         }
         $item['shop_image']=array_merge($images);
         $item['pictures']=array_merge($image);

@@ -86,36 +86,38 @@ class WxPay
      */
     public function notify($OrderModel)
     {
-//        $xml = <<<EOF
-//<xml><appid><![CDATA[wx62f4cad175ad0f90]]></appid>
-//<attach><![CDATA[test]]></attach>
-//<bank_type><![CDATA[ICBC_DEBIT]]></bank_type>
-//<cash_fee><![CDATA[1]]></cash_fee>
-//<fee_type><![CDATA[CNY]]></fee_type>
-//<is_subscribe><![CDATA[N]]></is_subscribe>
-//<mch_id><![CDATA[1499579162]]></mch_id>
-//<nonce_str><![CDATA[963b42d0a71f2d160b3831321808ab79]]></nonce_str>
-//<openid><![CDATA[o9coS0eYE8pigBkvSrLfdv49b8k4]]></openid>
-//<out_trade_no><![CDATA[2018062448524950]]></out_trade_no>
-//<result_code><![CDATA[SUCCESS]]></result_code>
-//<return_code><![CDATA[SUCCESS]]></return_code>
-//<sign><![CDATA[E252025255D59FE900DAFA4562C4EF5C]]></sign>
-//<time_end><![CDATA[20180624122501]]></time_end>
-//<total_fee>1</total_fee>
-//<trade_type><![CDATA[JSAPI]]></trade_type>
-//<transaction_id><![CDATA[4200000146201806242438472701]]></transaction_id>
-//</xml>
-//EOF;
+ /*    $xml ='<xml><appid><![CDATA[wx62f4cad175ad0f90]]></appid>
+<attach><![CDATA[test]]></attach>
+<bank_type><![CDATA[ICBC_DEBIT]]></bank_type>
+<cash_fee><![CDATA[1]]></cash_fee>
+<fee_type><![CDATA[CNY]]></fee_type>
+<is_subscribe><![CDATA[N]]></is_subscribe>
+<mch_id><![CDATA[1499579162]]></mch_id>
+<nonce_str><![CDATA[963b42d0a71f2d160b3831321808ab79]]></nonce_str>
+<openid><![CDATA[o9coS0eYE8pigBkvSrLfdv49b8k4]]></openid>
+<out_trade_no><![CDATA[2018062448524950]]></out_trade_no>
+<result_code><![CDATA[SUCCESS]]></result_code>
+<return_code><![CDATA[SUCCESS]]></return_code>
+<sign><![CDATA[E252025255D59FE900DAFA4562C4EF5C]]></sign>
+<time_end><![CDATA[20180624122501]]></time_end>
+<total_fee>1</total_fee>
+<trade_type><![CDATA[JSAPI]]></trade_type>
+<transaction_id><![CDATA[4200000146201806242438472701]]></transaction_id>
+</xml>';*/
         if (!$xml = file_get_contents('php://input')) {
             $this->returnCode(false, 'Not found DATA');
         }
         // 将服务器返回的XML数据转化为数组
         $data = $this->fromXml($xml);
+
+    //var_dump($data);
         // 记录日志
         $this->doLogs($xml);
         $this->doLogs($data);
         // 订单信息
         $order = $OrderModel->payDetail($data['out_trade_no']);
+       // echo $data['out_trade_no'];
+
         empty($order) && $this->returnCode(true, '订单不存在');
         // 小程序配置信息
         $wxConfig = WxappModel::getWxappCache($order['wxapp_id']);
@@ -131,12 +133,25 @@ class WxPay
         if (($sign === $dataSign)
             && ($data['return_code'] == 'SUCCESS')
             && ($data['result_code'] == 'SUCCESS')) {
-            // 更新订单状态
-            $order->updatePayStatus($data['transaction_id']);
-            // 发送短信通知
-            $this->sendSms($order['wxapp_id'], $order['order_no']);
-            // 返回状态
-            $this->returnCode(true, 'OK');
+            if($order->is_hidden==1){
+                $order->updatePayStatus($data['transaction_id']);
+                $orders=db("order")->where(['parent_id'=>$order['order_id']])->select();
+                foreach($orders as $v){
+                    $order = $OrderModel->payDetail($v['order_no']);
+                    // 更新订单状态
+                    $order->updatePayStatus($data['transaction_id']);
+                    // 发送短信通知
+                    $this->sendSms($order['wxapp_id'], $order['order_no']);
+                }
+                $this->returnCode(true, 'OK');
+            }else{
+                // 更新订单状态
+                $order->updatePayStatus($data['transaction_id']);
+                // 发送短信通知
+                $this->sendSms($order['wxapp_id'], $order['order_no']);
+                // 返回状态
+                $this->returnCode(true, 'OK');
+            }
         }
         // 返回状态
         $this->returnCode(false, '签名失败');

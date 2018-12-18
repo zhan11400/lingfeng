@@ -28,6 +28,10 @@ return [
                 ],
             ],
             [
+                'name' => '新店列表',
+                'index' => 'shop/new_shop',
+            ],
+            [
                 'name' => '店铺分类',
                 'index' => 'shop.category/index',
                 'uris' => [

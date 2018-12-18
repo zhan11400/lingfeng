@@ -20,7 +20,7 @@
                             <div class="am-form-group">
                                 <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">商品分类 </label>
                                 <div class="am-u-sm-9 am-u-end">
-                                    <select name="goods[category_id]" required
+                                    <select name="goods[plat_category_id]" required
                                             data-am-selected="{searchBox: 1, btnSize: 'sm',  placeholder:'请选择商品分类'}">
                                         <option value=""></option>
                                         <?php if (isset($catgory)): foreach ($catgory as $first): ?>
@@ -38,6 +38,30 @@
                                     <small class="am-margin-left-xs">
                                         <a href="<?= url('goods.category/add') ?>">去添加</a>
                                     </small>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">平台商品分类 </label>
+                                <div class="am-u-sm-9 am-u-end">
+                                    <select name="goods[category_id]" required
+                                            data-am-selected="{searchBox: 1, btnSize: 'sm',  placeholder:'请选择商品分类'}">
+                                        <option value=""></option>
+                                        <?php if (isset($platformcatgory)): foreach ($platformcatgory as $first): ?>
+                                            <option value="<?= $first['category_id'] ?>"
+                                              >
+                                                <?= $first['name'] ?></option>
+                                            <?php if (isset($first['child'])): foreach ($first['child'] as $two): ?>
+                                                <option value="<?= $two['category_id'] ?>"
+                                                 >
+                                                    　　<?= $two['name'] ?></option>
+                                                <?php if (isset($two['child'])): foreach ($two['child'] as $three): ?>
+                                                    <option value="<?= $three['category_id'] ?>"
+                                                     >
+                                                        　　　<?= $three['name'] ?></option>
+                                                <?php endforeach; endif; ?>
+                                            <?php endforeach; endif; ?>
+                                        <?php endforeach; endif; ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="am-form-group">

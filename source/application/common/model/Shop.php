@@ -25,7 +25,7 @@ class Shop extends BaseModel
      * @return \think\Paginator
      * @throws \think\exception\DbException
      */
-    public function getList($status = null, $category_id = 0, $search = '', $sortType = 'all', $pageSize = 10)
+    public function getList($status = null, $category_id = 0, $search = '', $sortType = 'all', $pageSize = 10,$is_new=0)
     {
         // 筛选条件
         $filter = [];
@@ -33,6 +33,7 @@ class Shop extends BaseModel
         $status > 0 && $filter['shop_status'] = $status;
         !empty($search) && $filter['shop_name'] = ['like', '%' . trim($search) . '%'];
         $filter['is_delete']=0;
+        $is_new > 0 && $filter['is_new'] = 1;
         // 排序规则
         $sort = [];
         if ($sortType === 'all') {
@@ -65,9 +66,9 @@ class Shop extends BaseModel
               $image_ids=unserialize($item['shop_image']);
               $where['file_id']=array('in',$image_ids);
               $files= $db_add['file']->where($where)->cache(CACHE_TIME)->column("file_id,file_name");
-              foreach($files as $k=> $file_name){
-                  $images[$k]['file_path'] =IMG_PATH.$file_name;
-                  $images[$k]['image_id'] =$k;
+              foreach($image_ids as $k=> $v){
+                  $images[$k]['file_path'] =IMG_PATH.$files[$v];
+                  $images[$k]['image_id'] =$v;
               }
               $item['shop_image']=array_merge($images);
               $item['shop_logo']= IMG_PATH.$db_add['file']->cache(CACHE_TIME)->where(['file_id'=>$item['shop_logo']])->value("file_name");
@@ -80,7 +81,7 @@ class Shop extends BaseModel
 
     public function shopDetail($shop_id)
     {
-        $item= $this->where(['shop_status'=>10,'is_delete'=>0,'shop_id'=>$shop_id])->find();
+        $item= $this->where(['is_delete'=>0,'shop_id'=>$shop_id])->find();
         if(!$item) return $item;
 
         if($item['shop_status']==10) {
@@ -91,9 +92,9 @@ class Shop extends BaseModel
         $image_ids=unserialize($item['shop_image']);
         $where['file_id']=array('in',$image_ids);
         $files= db("upload_file")->where($where)->cache(CACHE_TIME)->column("file_id,file_name");
-        foreach($files as $k=> $file_name){
-            $images[$k]['file_path'] =IMG_PATH.$file_name;
-            $images[$k]['image_id'] =$k;
+        foreach($image_ids as $k=> $v){
+            $images[$k]['file_path'] =IMG_PATH.$files[$v];
+            $images[$k]['image_id'] =$v;
         }
         $item['shop_image']=array_merge($images);
         $item['shop_logo']= IMG_PATH.db("upload_file")->cache(CACHE_TIME)->where(['file_id'=>$item['shop_logo']])->value("file_name");

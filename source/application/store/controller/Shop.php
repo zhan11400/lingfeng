@@ -18,6 +18,18 @@ class Shop extends Controller
       //  dump($list);
        return $this->fetch('index',compact('catgory', 'list'));
     }
+    /*
+   * 新店列表
+   */
+    public function new_shop()
+    {
+        $model = new ShopModel;
+        $list=$model->getList($status = null, $category_id = 0, $search = '', $sortType = 'all',10,1);
+        //var_dump($list);
+        $catgory = ShopCategory::getCacheTree();
+        //  dump($list);
+        return $this->fetch('index',compact('catgory', 'list'));
+    }
     /**
      * 添加店铺
      * @return array|mixed

@@ -30,10 +30,10 @@ class Shop extends Controller
      * @return array
      * @throws \think\exception\DbException
      */
-    public function lists($category_id=0, $search='', $sortType='all', $pageSize=5)
+    public function lists($category_id=0, $search='', $sortType='all', $pageSize=5,$is_new=0)
     {
         $model = new ShopModel;
-        $list = $model->getList(10, $category_id, $search, $sortType, $pageSize);
+        $list = $model->getList(10, $category_id, $search, $sortType, $pageSize,$is_new);
         return $this->renderSuccess(compact('list'));
     }
     /**
