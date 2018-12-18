@@ -19,6 +19,7 @@
                                 <th>状态</th>
                                 <th>申请时间</th>
                                 <th>处理时间</th>
+                                <th>操作</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -29,8 +30,11 @@
                                     <td class="am-text-middle"><?= $item['account'] ?: '--' ?></td>
                                     <td class="am-text-middle"><?= $item['money'] ?: '--' ?></td>
                                     <td class="am-text-middle"><?= $item['status_str'] ?: '--' ?></td>
-                                    <td class="am-text-middle"><?= date("Y-m-d H:i:s",$item['create_time']) ?></td>
+                                    <td class="am-text-middle"><?= $item['create_time'] ?></td>
                                     <td class="am-text-middle"><?= $item['check_time']?date("Y-m-d H:i:s",$item['check_time']):'-' ?></td>
+                                    <td class="am-text-middle"><? if($item['status']==0){ ?>
+                                    <button type="button" class="btn btn-success" data-id="<?= $item['id'] ?>" data-status="1">打款</button>
+                                            <button type="button" class="btn btn-warning" data-id="<?= $item['id'] ?>" data-status="-1">拒绝</button>                       <? } ?></td>
                                 </tr>
                             <?php endforeach; else: ?>
                                 <tr>
@@ -53,7 +57,27 @@
 </div>
 <script>
     $(function () {
+        $(".btn").click(function () {
+            var id=$(this).data("id");
+            var status=$(this).data("status")
+            var text=$(this).html()
+            layer.confirm('确认'+text+'?',function(){
+                $.ajax({
+                    type:'post',
+                    url:"<?= url('finance/pay') ?>",
+                    data:{'id':id,'status':status},
+                    dataType:'json',
+                    success:function(result){
+                        if(result.code==1){
+                            layer.msg(result.msg);
+                            location.reload();
+                        }else{
+                            layer.alert(result.msg);
+                        }
 
+                }});
+            })
+        })
     });
 </script>
 

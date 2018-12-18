@@ -66,4 +66,21 @@ class Managers extends Controller
         }
         return $this->renderError('操作失败');
     }
+    /**
+     * 删除商品
+     * @param $goods_id
+     * @return array
+     * @throws \think\exception\DbException
+     */
+    public function delete($id)
+    {
+        $info = $this->model->where(['admin_id'=>$id])->find();
+        if(!$info){
+            return $this->renderSuccess('删除成功');
+        }
+        if (!$this->model->remove($id)) {
+            return $this->renderError('删除失败');
+        }
+        return $this->renderSuccess('删除成功');
+    }
 }

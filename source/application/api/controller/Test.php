@@ -2,8 +2,10 @@
 
 namespace app\api\controller;
 
+use app\api\model\UserFavoriteShop;
 use app\common\model\Order;
 use app\common\model\Shop;
+use app\common\model\ShopDynamic;
 use think\Cache;
 
 set_time_limit(0);
@@ -28,5 +30,18 @@ class Test extends Controller
             shop_money_log($v->shop_id, -$serve_fee, '缴纳' . date("Y") . '-' . str_pad(date("m") - 1, 2, '0', STR_PAD_LEFT) . '服务费', 2);
         }
        }
+    }
+
+    public function index()
+    {
+        $model=new UserFavoriteShop();
+        $user = $this->getUser();   // 用户信息
+
+        $shop_ids=$model->getCollectShopId($user->user_id);
+        $model2=new ShopDynamic();
+        $list=$model2->getDynamicList($shop_ids);
+      //  var_dump($list);
+      return  $this->renderSuccess(compact('list'));
+       // return $this->beforeActionList;
     }
 }

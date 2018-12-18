@@ -87,7 +87,8 @@
                                     <input type="text" class="tpl-form-input" id="lat" name="shop[lat]"
                                            value="" required style="display: inline-block;width: 30%;">
                                     <button class="am-btn-primary getLatAndLng" type="button">获取经纬度</button>
-                                    <div id="container2"  style="margin-top:5px;width: 642px;
+                                    <a target="_blank" href="http://api.map.baidu.com/lbsapi/getpoint/index.html">手动获取</a>
+                                    <div id="container2" class="am-btn-primary"   style="margin-top:5px;width: 642px;
                                     height: 300px;border: 1px solid gray;overflow:hidden;">
                                     </div>
                                 </div>
@@ -212,7 +213,7 @@
 <script src="assets/store/plugins/umeditor/umeditor.min.js"></script>
 <script src="assets/store/js/goods.spec.js"></script>
 <script class="resources library" src="assets/store/js/area.js" type="text/javascript"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.5&ak=<?= BAIDU_AK?>"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=<?= BAIDU_AK?>"></script>
 <script>
     _init_area();
     $(function () {
@@ -292,19 +293,11 @@
             // form data
             buildData: function () {
                 return {
-                    goods: {
-                        spec_many: specMany.getData()
-                    }
+
                 };
             },
             // 自定义验证
             validation: function () {
-                var specType = $('input:radio[name="goods[spec_type]"]:checked').val();
-                if (specType === '20') {
-                    var isEmpty = specMany.isEmptySkuList();
-                    isEmpty === true && layer.msg('店铺规格不能为空');
-                    return !isEmpty;
-                }
                 return true;
             }
         });

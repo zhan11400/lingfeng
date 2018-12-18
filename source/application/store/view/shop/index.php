@@ -40,7 +40,7 @@
                                     <td class="am-text-middle">
                                         <p class="item-title"><?= $item['shop_name'] ?></p>
                                     </td>
-                                    <td class="am-text-middle"><?= $item['shop_sort']?><?= $item['shop_status'] ?></td>
+                                    <td class="am-text-middle"><?= $item['shop_sort']?></td>
                                     <td class="am-text-middle">
                                             <span class="<?= $item['shop_status']== 10 ? 'x-color-green'
                                                 : 'x-color-red' ?>">

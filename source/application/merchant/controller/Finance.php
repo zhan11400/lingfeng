@@ -1,6 +1,7 @@
 <?php
 namespace app\merchant\controller;
 use app\common\model\Shop;
+use app\common\model\ShopWithdrawals;
 use think\Db;
 
 /**
@@ -21,8 +22,9 @@ class Finance extends Controller
 
     public function apply_log()
     {
-        $model=new \app\common\model\Finance();
+        $model=new ShopWithdrawals();
          $list= $model->getWithdrawalsList($this->shop_id);
+        $model=new \app\common\model\Finance();
         $money= $model->getShopMoney($this->shop_id);
         return $this->fetch('apply_log', compact('list','money'));
     }
@@ -51,12 +53,14 @@ class Finance extends Controller
                     return $this->renderError('请先配置提现的支付宝账号');
                 }
                 $data['user_name']=$info['ali_name'];
+                $data['pay_no']=date("YmdHis").rand(1000,9999);
                 $data['account']=$info['ali_account'];
                 $data['money']=$money;
                 $data['status']='0';
                 $data['create_time']=time();
                 $data['shop_id']=$this->shop_id;
-                db("shop_withdrawals")->insert($data);
+                $model=new ShopWithdrawals();
+                $res= $model->addWithdrawalsLog($data);
                 shop_money_log($this->shop_id,$money,'余额提现',1);
                 return $this->renderSuccess('提现成功，请等待后台审核');
             }else{

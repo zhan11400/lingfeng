@@ -15,7 +15,7 @@ use think\Request;
  */
 class UserFavoriteShop extends Model
 {
-    public static $wxapp_id;
+
 //    protected $name = 'shop';
     protected $fk = 'shop_id';
     public function is_collected($wxapp_id,$user_id,$shop_id)
@@ -48,7 +48,7 @@ class UserFavoriteShop extends Model
 
     public function shop()
     {
-        return $this->belongsTo('Shop');
+        return $this->belongsTo('Shop')->where(['shop_status'=>10,'is_delete'=>0]);
     }
     //收藏列表
     public function getList($user_id,$status=1)
@@ -101,5 +101,14 @@ class UserFavoriteShop extends Model
               return $item;
           });
         return $list;
+    }
+    public function getCollectShopId($user_id)
+    {
+        //关注的店铺，并且店铺没被下架，没被删除
+        return  $this->alias("c")
+            ->join('shop s','s.shop_id = c.shop_id')
+            ->where(['user_id'=>$user_id,'status'=>1,'s.shop_status'=>10,'is_delete'=>0])
+            ->order("id desc")
+            ->column("c.shop_id");
     }
 }

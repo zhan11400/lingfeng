@@ -159,7 +159,7 @@ return [
         'submenu' => [
             [
                 'name' => '提现记录',
-                'index' => 'finance/apply_log',
+                'index' => 'finance/index',
             ],
         ]
     ],

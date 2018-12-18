@@ -29,7 +29,7 @@
                                     <td class="am-text-middle"><?= $item['account'] ?: '--' ?></td>
                                     <td class="am-text-middle"><?= $item['money'] ?: '--' ?></td>
                                     <td class="am-text-middle"><?= $item['status_str'] ?: '--' ?></td>
-                                    <td class="am-text-middle"><?= date("Y-m-d H:i:s",$item['create_time']) ?></td>
+                                    <td class="am-text-middle"><?= $item['create_time'] ?></td>
                                     <td class="am-text-middle"><?= $item['check_time']?date("Y-m-d H:i:s",$item['check_time']):'-' ?></td>
                                 </tr>
                             <?php endforeach; else: ?>

@@ -54,7 +54,7 @@
                                                 <i class="am-icon-pencil"></i> 编辑
                                             </a>
                                             <a href="javascript:;" class="item-delete tpl-table-black-operation-del"
-                                               data-id="<?= $item['shop_id'] ?>">
+                                               data-id="<?= $item['admin_id'] ?>">
                                                 <i class="am-icon-trash"></i> 删除
                                             </a>
                                         </div>
@@ -83,8 +83,8 @@
     $(function () {
 
         // 删除元素
-        var url = "<?= url('shop/delete') ?>";
-        $('.item-delete').delete('shop_id', url);
+        var url = "<?= url('managers/delete') ?>";
+        $('.item-delete').delete('id', url);
 
     });
 </script>

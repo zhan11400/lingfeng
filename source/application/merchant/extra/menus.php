@@ -95,6 +95,17 @@ return [
         'icon' => 'icon-application',
         'is_svg' => true,   // 多色图标
         'index' => 'plugins/index',
+        'submenu' => [
+            [
+                'name' => '商家动态',
+                'index' => 'plugins.dynamic/index',
+                'uris' => [
+                    'plugins.dynamic/index',
+                    'plugins.delivery/add',
+                    'plugins.delivery/edit',
+                ],
+            ],
+            ]
     ],
     'setting' => [
         'name' => '设置',

@@ -2,6 +2,7 @@
 
 namespace app\store\model;
 
+use app\common\model\BaseModel;
 use think\Cache;
 use think\Db;
 use think\Model;
@@ -12,9 +13,9 @@ use think\Request;
  * Class Category
  * @package app\store\model
  */
-class Managers extends Model
+class Managers extends BaseModel
 {
-    public static $wxapp_id;
+
     protected $name = 'shop_managers';
     /**
      * 添加管理员
@@ -27,6 +28,7 @@ class Managers extends Model
             $data['salt']=rand(1000,9999);
             $data['password']=md5($data['password'].$data['salt']);
         }
+        $data['wxapp_id']=self::$wxapp_id;
         unset($data['repassword']);
         // 开启事务
         Db::startTrans();
@@ -110,14 +112,14 @@ class Managers extends Model
      * 删除管理员
      * @return bool
      */
-    public function remove($shop_id)
+    public function remove($id)
     {
         // 开启事务处理
         Db::startTrans();
         try {
 
             // 删除当前商品
-            $this->where(['shop_id'=>$shop_id])->update(['is_delete'=>1]);
+            $this->where(['admin_id'=>$id])->delete();
             // 事务提交
             Db::commit();
             return true;

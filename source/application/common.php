@@ -172,7 +172,7 @@ function check_email($email){
  * @param $shop_id 店铺id
  * @param $money 金额变动，减少时需是负数
  *  @param $text 记录说明
- *  @param $type 0订单结算，1提现，2扣除服务费
+ *  @param $type 0订单结算，1提现，2扣除服务费,3提现失败返回金额
  */
 function shop_money_log($shop_id,$money,$text,$type){
     $data['shop_id']=$shop_id;
@@ -185,7 +185,7 @@ function shop_money_log($shop_id,$money,$text,$type){
     \think\Db::startTrans();
     try {
         db("shop_money_log")->insert($data);
-        if($type==0) {
+        if(in_array($type,[0,3])) {
             db("shop")->where(['shop_id' => $shop_id])->setInc("money", $money);
         }else{
             db("shop")->where(['shop_id' => $shop_id])->setDec("money", $money);

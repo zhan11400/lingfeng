@@ -93,6 +93,8 @@
                                     <input type="text" class="tpl-form-input" id="lat" name="shop[lat]"
                                            value="<?= $model['lat'] ?>" required style="display: inline-block;width: 30%;">
                                     <button class="am-btn-primary getLatAndLng" type="button">获取经纬度</button>
+
+                                    <a target="_blank" href="http://api.map.baidu.com/lbsapi/getpoint/index.html">手动获取</a>
                                     <div id="container2"  style="margin-top:5px;width: 642px;
                                     height: 300px;border: 1px solid gray;overflow:hidden;">
                                     </div>
@@ -131,7 +133,7 @@
                                                 class="upload-file am-btn am-btn-secondary am-radius">
                                             <i class="am-icon-cloud-upload"></i> 选择图片
                                         </button>
-                                        <div class="uploader-list am-cf">
+                                        <div class="uploader-list uploader-shop am-cf">
                                             <?php foreach ($model['image'] as $key => $item): ?>
                                                 <div class="file-item">
                                                     <img src="<?= $item['file_path'] ?>">
@@ -155,7 +157,7 @@
                                                 class="upload-file2 am-btn am-btn-secondary am-radius">
                                             <i class="am-icon-cloud-upload"></i> 选择图片
                                         </button>
-                                        <div class="uploader-list am-cf">
+                                        <div class="uploader-list uploader-pic am-cf">
                                             <?php foreach ($model['pictures'] as $key => $item): ?>
                                                 <div class="file-item">
                                                     <img src="<?= $item['file_path'] ?>">
@@ -235,7 +237,7 @@
 <script src="assets/store/plugins/umeditor/umeditor.min.js"></script>
 <script src="assets/store/js/goods.spec.js"></script>
 <script class="resources library" src="assets/store/js/area.js" type="text/javascript"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.5&ak=<?= BAIDU_AK?>"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=<?= BAIDU_AK?>"></script>
 <script>
     var opt0 = ["<?= $model['province'] ?>","<?= $model['city'] ?>","<?= $model['area'] ?>"];//初始值
     _init_area();
@@ -299,7 +301,7 @@
             name: 'shop[shop_logo]'
         });
         // 图片列表拖动
-        $('.uploader-list').DDSort({
+        $('.uploader-shop').DDSort({
             target: '.file-item',
             delay: 100, // 延时处理，默认为 50 ms，防止手抖点击 A 链接无效
             floatStyle: {
@@ -307,7 +309,15 @@
                 'background-color': '#fff'
             }
         });
-        
+        // 图片列表拖动
+        $('.uploader-pic').DDSort({
+            target: '.file-item',
+            delay: 100, // 延时处理，默认为 50 ms，防止手抖点击 A 链接无效
+            floatStyle: {
+                'border': '1px solid #ccc',
+                'background-color': '#fff'
+            }
+        });
 
         /**
          * 表单验证提交
@@ -318,18 +328,11 @@
             buildData: function () {
                 return {
                     shop: {
-                        spec_many: specMany.getData()
                     }
                 };
             },
             // 自定义验证
             validation: function () {
-                var specType = $('input:radio[name="goods[spec_type]"]:checked').val();
-                if (specType === '20') {
-                    var isEmpty = specMany.isEmptySkuList();
-                    isEmpty === true && layer.msg('店铺规格不能为空');
-                    return !isEmpty;
-                }
                 return true;
             }
         });

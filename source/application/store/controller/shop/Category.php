@@ -69,9 +69,13 @@ class Category extends Controller
     {
         // 模板详情
         $model = CategoryModel::get($category_id);
+        if(!$model){
+            $this->redirect(base_url().url('shop.category/index'));
+        }
         if (!$this->request->isAjax()) {
             // 获取所有地区
-            $list = $model->getCacheTree();
+            $list = CategoryModel::getCacheTree();
+            var_dump($model->image_id);
             $file_name= db("upload_file")->where(['file_id'=>$model->image_id])->value("file_name");
             $model->image=IMG_PATH.$file_name;
             return $this->fetch('edit', compact('model', 'list'));

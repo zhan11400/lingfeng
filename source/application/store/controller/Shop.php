@@ -31,10 +31,9 @@ class Shop extends Controller
         }
         $model = new ShopModel;
         if ($model->add($this->postData('shop'))) {
-			 $this->redirect(base_url().url('shop/index'));
-           // return $this->renderSuccess('添加成功', url('shop/index'));
+			// $this->redirect(base_url().url('shop/index'));
+            return $this->renderSuccess('添加成功', url('shop/index'));
         }
-		 $this->error('操作失败');
         $error = $model->getError() ?: '添加失败';
         return $this->renderError($error);
     }
@@ -49,24 +48,24 @@ class Shop extends Controller
     {
         // 商品详情
         $model = ShopModel::get($shop_id);
-        if (!$this->request->isPost()) {
+        if (!$this->request->isAjax()) {
             // 商品分类
             $catgory = ShopCategory::getCacheTree();
             $image_ids=unserialize($model->shop_image);
             $where['file_id']=array('in',$image_ids);
             $files= db("upload_file")->where($where)->column("file_id,file_name");
-           foreach($files as $k=> $file_name){
-               $images[$k]['file_path'] =IMG_PATH.$file_name;
-               $images[$k]['image_id'] =$k;
-           }
+            foreach($image_ids as $k=> $v){
+                $images[$k]['file_path'] =IMG_PATH.$files[$v];
+                $images[$k]['image_id'] =$v;
+            }
             $model->image =$images;
             $image_ids=unserialize($model->pictures);
             $where['file_id']=array('in',$image_ids);
             $files= db("upload_file")->where($where)->column("file_id,file_name");
             $images=[];
-            foreach($files as $k=> $file_name){
-                $images[$k]['file_path'] =IMG_PATH.$file_name;
-                $images[$k]['image_id'] =$k;
+            foreach($image_ids as $k=> $v){
+                $images[$k]['file_path'] =IMG_PATH.$files[$v];
+                $images[$k]['image_id'] =$v;
             }
             $model->pictures =$images;
             $model->shop_logo_img=IMG_PATH.db("upload_file")->where(['file_id'=>$model->shop_logo])->value("file_name");
@@ -76,10 +75,11 @@ class Shop extends Controller
         $model = new ShopModel;
 
         if ($model->edit($this->postData('shop'))) {
-           $this->redirect(base_url().url('shop/index'));
-           //return $model->renderJson('添加成功', url('shop/index'));
+          // $this->redirect(base_url().url('shop/index'));
+           return $this->renderSuccess('操作成功', url('shop/index'));
         }
-        $this->error('操作失败');
+        $error = $model->getError() ?: '操作失败';
+        return $this->renderError($error);
     }
 
     /**

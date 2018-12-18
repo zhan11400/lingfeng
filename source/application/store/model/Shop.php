@@ -70,10 +70,8 @@ class Shop extends \app\common\model\Shop
             $this->error = '请上传环境图片';
             return false;
         }
-
         $data['content'] = isset($data['content']) ? $data['content'] : '';
         $data['shop_image']=serialize($data['images']);
-		 $data['wxapp_id']= self::$wxapp_id;
         $data['pictures']=serialize($data['pictures']);
         $data['update_time']=time();
         unset($data['images']);
