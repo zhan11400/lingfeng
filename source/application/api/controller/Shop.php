@@ -1,6 +1,7 @@
 <?php
 
 namespace app\api\controller;
+use app\api\model\ShopCategory;
 use app\api\model\UserFavoriteSho;
 use app\api\model\UserFavoriteShop;
 use app\common\model\Goods;
@@ -34,6 +35,12 @@ class Shop extends Controller
     {
         $model = new ShopModel;
         $list = $model->getList(10, $category_id, $search, $sortType, $pageSize,$is_new);
+        return $this->renderSuccess(compact('list'));
+    }
+    public function cate()
+    {
+        $model = new ShopCategory();
+        $list = $model->getCategory();
         return $this->renderSuccess(compact('list'));
     }
     /**

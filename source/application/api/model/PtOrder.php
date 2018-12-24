@@ -60,7 +60,7 @@ class PtOrder extends OrderModel
         if ($goods_num > $goods['goods_sku']['limit_num'] && $goods['goods_sku']['limit_num'] > 0) {
             $this->setError('很抱歉，该商品最大购买数量为' . $goods['goods_sku']['limit_num']);
         }
-        $this->setError('');
+        $this->setError('');				
         // 商品单价
         $goods['goods_price'] = $goods['goods_sku']['goods_price'];
         // 商品总价

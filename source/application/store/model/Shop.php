@@ -14,7 +14,6 @@ use think\Request;
  */
 class Shop extends \app\common\model\Shop
 {
-    public static $wxapp_id;
     /**
      * 添加店铺
      * @param array $data
@@ -34,9 +33,14 @@ class Shop extends \app\common\model\Shop
             $this->error = '请上传环境图片';
             return false;
         }
+        if (!isset($data['shop_message']) || empty($data['shop_message'])) {
+            $this->error = '请上传商家信息图片';
+            return false;
+        }
         $data['content'] = isset($data['content']) ? $data['content'] : '';
 		$data['pictures']=serialize($data['pictures']);
-		$data['wxapp_id']= config('wxapp_id');
+        $data['shop_message']=serialize($data['shop_message']);
+		$data['wxapp_id']= self::$wxapp_id;
         $data['shop_image']=serialize($data['images']);
         unset($data['images']);
         // 开启事务
@@ -70,9 +74,14 @@ class Shop extends \app\common\model\Shop
             $this->error = '请上传环境图片';
             return false;
         }
+        if (!isset($data['shop_message']) || empty($data['shop_message'])) {
+            $this->error = '请上传商家信息图片';
+            return false;
+        }
         $data['content'] = isset($data['content']) ? $data['content'] : '';
         $data['shop_image']=serialize($data['images']);
         $data['pictures']=serialize($data['pictures']);
+        $data['shop_message']=serialize($data['shop_message']);
         $data['update_time']=time();
         unset($data['images']);
 

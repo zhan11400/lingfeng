@@ -6,6 +6,7 @@ use app\common\model\Wxapp as WxappModel;
 use app\task\model\Setting as SettingModel;
 use app\common\library\sms\Driver as SmsDriver;
 use app\common\exception\BaseException;
+use think\Log;
 
 /**
  * 微信支付
@@ -110,7 +111,7 @@ class WxPay
         // 将服务器返回的XML数据转化为数组
         $data = $this->fromXml($xml);
 
-    //var_dump($data);
+  //  var_dump($data);
         // 记录日志
         $this->doLogs($xml);
         $this->doLogs($data);

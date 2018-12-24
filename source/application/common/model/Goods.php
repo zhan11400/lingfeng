@@ -194,6 +194,8 @@ class Goods extends BaseModel
     }
     public function getApiList($status = null, $category_id = 0, $search = '', $sortType = 'all', $sortPrice = false)
     {
+        $type=input('type/d',0);
+        $is_index=input('is_index/d',0);
         // 筛选条件
         $filter = [];
         //  $category_id > 0 && $filter['category_id'] = $category_id;
@@ -201,10 +203,9 @@ class Goods extends BaseModel
             $cid=db("category")->where(['parent_id'=>$category_id])->column("category_id");
             array_push($cid,$category_id);
             $filter['category_id'] = ['in',$cid];
-        }else{
-            $filter['category_id'] = $category_id;
         }
-
+        $type > 0 && $filter['type'] = $type;
+        $is_index > 0 && $filter['is_index'] = $is_index;
         $status > 0 && $filter['goods_status'] = $status;
         !empty($search) && $filter['goods_name'] = ['like', '%' . trim($search) . '%'];
 
@@ -348,6 +349,41 @@ class Goods extends BaseModel
             }
         }
         return $goods_sku;
+    }
+
+    /**
+     * @param null $status
+     * @param int $category_id
+     * @param string $search
+     * @param string $sortType
+     * @param bool|false $sortPrice
+     * @return \think\Paginator
+     */
+    public function getCollectList($goods_ids = [],$status=10)
+    {
+        // 筛选条件
+        $filter = [];
+        $filter['goods_id']=['in',$goods_ids];
+        $status > 0 && $filter['goods_status'] = $status;
+        // 商品表名称
+        $tableName = $this->getTable();
+        // 多规格商品 最高价与最低价
+        $GoodsSpec = new GoodsSpec;
+        $minPriceSql = $GoodsSpec->field(['MIN(goods_price)'])
+            ->where('goods_id', 'EXP', "= `$tableName`.`goods_id`")->buildSql();
+        $maxPriceSql = $GoodsSpec->field(['MAX(goods_price)'])
+            ->where('goods_id', 'EXP', "= `$tableName`.`goods_id`")->buildSql();
+        // 执行查询
+        $list = $this->field(['*', '(sales_initial + sales_actual) as goods_sales',
+            "$minPriceSql AS goods_min_price",
+            "$maxPriceSql AS goods_max_price"
+        ])->with(['category', 'image.file', 'spec'])
+            ->where('is_delete', '=', 0)
+            ->where($filter)
+            ->paginate(15, false, [
+                'query' => Request::instance()->request()
+            ]);
+        return $list;
     }
 
 }

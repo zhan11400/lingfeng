@@ -128,7 +128,7 @@
                                 </div>
                             </div>
                             <div class="am-form-group">
-                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">店铺图片 </label>
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">环境图片 </label>
                                 <div class="am-u-sm-9 am-u-end">
                                     <div class="am-form-file">
                                         <button type="button"
@@ -152,7 +152,7 @@
                                 </div>
                             </div>
                             <div class="am-form-group">
-                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">环境图片 </label>
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">产品图片 </label>
                                 <div class="am-u-sm-9 am-u-end">
                                     <div class="am-form-file">
                                         <button type="button"
@@ -175,7 +175,30 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="am-form-group">
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">商家信息 </label>
+                                <div class="am-u-sm-9 am-u-end">
+                                    <div class="am-form-file">
+                                        <button type="button"
+                                                class="upload-file3 am-btn am-btn-secondary am-radius">
+                                            <i class="am-icon-cloud-upload"></i> 选择图片
+                                        </button>
+                                        <div class="uploader-list uploader-pic am-cf">
+                                            <?php foreach ($model['shop_message'] as $key => $item): ?>
+                                                <div class="file-item">
+                                                    <img src="<?= $item['file_path'] ?>">
+                                                    <input type="hidden" name="shop[shop_message][]"
+                                                           value="<?= $item['image_id'] ?>">
+                                                    <i class="iconfont icon-shanchu file-item-delete"></i>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                    <div class="help-block am-margin-top-sm">
+                                        <small>主要用来展示营业执照之类</small>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="widget-head am-cf">
                                 <div class="widget-title am-fl">商家说明</div>
                             </div>
@@ -311,6 +334,11 @@
         // 选择环境图片
         $('.upload-file2').selectImages({
             name: 'shop[pictures][]'
+            , multiple: true
+        });
+        // 选择商家信息
+        $('.upload-file3').selectImages({
+            name: 'shop[shop_message][]'
             , multiple: true
         });
         // 选择logo

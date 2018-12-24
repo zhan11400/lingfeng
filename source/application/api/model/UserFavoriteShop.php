@@ -2,6 +2,7 @@
 
 namespace app\api\model;
 
+use app\common\model\BaseModel;
 use think\Cache;
 use think\Db;
 use think\Log;
@@ -13,7 +14,7 @@ use think\Request;
  * Class Category
  * @package app\store\model
  */
-class UserFavoriteShop extends Model
+class UserFavoriteShop extends BaseModel
 {
 
 //    protected $name = 'shop';

@@ -4,6 +4,7 @@ namespace app\api\controller;
 
 use app\api\controller\user\Index;
 use app\api\model\User as UserModel;
+use app\api\model\UserFavoriteGoods;
 use app\api\model\UserFavoriteShop;
 
 /**
@@ -37,6 +38,17 @@ class User extends Controller
         $user=$this->getUser();
         $UserFavoriteShop=new UserFavoriteShop();
         $list=$UserFavoriteShop->getList($user->user_id);
+        return $this->renderSuccess(compact('list'));
+    }
+    //我收藏的商品
+    public function myCollectGoods()
+    {
+        if(!request()->isPost()){
+            return $this->renderSuccess('请求方式有误');
+        }
+        $user=$this->getUser();
+        $UserFavoriteGoods=new UserFavoriteGoods();
+        $list=$UserFavoriteGoods->getList($user->user_id);
         return $this->renderSuccess(compact('list'));
     }
 }

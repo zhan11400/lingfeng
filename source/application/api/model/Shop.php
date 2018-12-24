@@ -49,7 +49,7 @@ class Shop extends \app\common\model\Shop
         $image_ids=unserialize($item['shop_image']);
         $where['file_id']=array('in',$image_ids);
         $files= db("upload_file")->where($where)->cache(CACHE_TIME)->column("file_id,file_name");
-		$image=[];
+        $images=[];
         foreach($image_ids as $k=> $v){
             $images[$k]['file_path'] =IMG_PATH.$files[$v];
             $images[$k]['image_id'] =$v;
@@ -58,10 +58,20 @@ class Shop extends \app\common\model\Shop
         $image_ids=unserialize($item['pictures']);
         $where['file_id']=array('in',$image_ids);
         $files= db("upload_file")->where($where)->cache(CACHE_TIME)->column("file_id,file_name");
+        $image=[];
         foreach($image_ids as $k=> $v){
             $image[$k]['file_path'] =IMG_PATH.$files[$v];
             $image[$k]['image_id'] =$v;
         }
+		  $image_ids=unserialize($item['shop_message']);
+        $where['file_id']=array('in',$image_ids);
+        $files= db("upload_file")->where($where)->cache(CACHE_TIME)->column("file_id,file_name");
+        $shop_message=[];
+        foreach($image_ids as $k=> $v){
+            $shop_message[$k]['file_path'] =IMG_PATH.$files[$v];
+            $shop_message[$k]['image_id'] =$v;
+        }
+        $item['shop_message']=array_merge($shop_message);
         $item['shop_image']=array_merge($images);
         $item['pictures']=array_merge($image);
         $item['shop_logo']= IMG_PATH.db("upload_file")->cache(CACHE_TIME)->where(['file_id'=>$item['shop_logo']])->value("file_name");

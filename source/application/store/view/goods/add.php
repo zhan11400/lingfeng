@@ -256,6 +256,50 @@
                                 </div>
                             </div>
                             <div class="am-form-group">
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">商品属性 </label>
+                                <div class="am-u-sm-9 am-u-end">
+                                    <label class="am-radio-inline">
+                                        <input type="radio" name="goods[type]" value="0" data-am-ucheck
+                                               checked >
+                                        普通
+                                    </label>
+                                    <label class="am-radio-inline">
+                                        <input type="radio" name="goods[type]" value="1" data-am-ucheck  >
+                                        促销
+                                    </label>
+                                    <label class="am-radio-inline">
+                                        <input type="radio" name="goods[type]" value="2" data-am-ucheck >
+                                        平远9.9元
+                                    </label>
+                                    <label class="am-radio-inline">
+                                        <input type="radio" name="goods[type]" value="3" data-am-ucheck  >
+                                        吃货区
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">是否首页 </label>
+                                <div class="am-u-sm-9 am-u-end">
+                                    <label class="am-radio-inline">
+                                        <input type="radio" name="goods[is_index]" value="0" data-am-ucheck
+                                               checked>
+                                        否
+                                    </label>
+                                    <label class="am-radio-inline">
+                                        <input type="radio" name="goods[is_index]" value="1" data-am-ucheck>
+                                        是
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">发货地址</label>
+                                <div class="am-u-sm-9 am-u-end">
+                                    <select id="s_province" name="goods[province]"></select>&nbsp;&nbsp;
+                                    <select id="s_city" name="goods[city]" ></select>&nbsp;&nbsp;
+                                    <select id="s_county"  name="goods[area]" ></select>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
                                 <div class="am-u-sm-9 am-u-sm-push-3 am-margin-top-lg">
                                     <button type="submit" class="j-submit am-btn am-btn-secondary">提交
                                     </button>
@@ -282,7 +326,9 @@
 <script src="assets/store/plugins/umeditor/umeditor.config.js"></script>
 <script src="assets/store/plugins/umeditor/umeditor.min.js"></script>
 <script src="assets/store/js/goods.spec.js"></script>
+<script class="resources library" src="assets/store/js/area.js" type="text/javascript"></script>
 <script>
+    _init_area();
     $(function () {
 
         // 富文本编辑器

@@ -37,7 +37,7 @@ class Shop extends BaseModel
         // 排序规则
         $sort = [];
         if ($sortType === 'all') {
-            $sort = ['shop_sort', 'shop_id' => 'desc'];
+            $sort = ['shop_sort' => 'desc','shop_id'=>'desc'];
         } elseif ($sortType === 'sales') {
             $sort = ['goods_sales' => 'desc'];
         } elseif ($sortType === 'new') {

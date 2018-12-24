@@ -1,8 +1,8 @@
 <?php
 
-namespace app\store\controller\goods;
+namespace app\merchant\controller\goods;
 
-use app\store\controller\Controller;
+use app\merchant\controller\Controller;
 use app\store\model\Spec as SpecModel;
 use app\store\model\SpecValue as SpecValueModel;
 

@@ -97,7 +97,25 @@
                                 <div class="widget-title am-fl">图片</div>
                             </div>
                             <div class="am-form-group">
-                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">店铺图片 </label>
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label">店铺logo </label>
+                                <div class="am-u-sm-9 am-u-end">
+                                    <div class="am-form-file">
+                                        <button type="button"
+                                                class="upload-file_logo am-btn am-btn-secondary am-radius">
+                                            <i class="am-icon-cloud-upload"></i> 选择图片
+                                        </button>
+                                        <div class="uploader-list am-cf">
+
+
+                                        </div>
+                                    </div>
+                                    <div class="help-block am-margin-top-sm">
+                                        <small>尺寸150x150像素以上，大小2M以下</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="am-form-group">
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">环境图片 </label>
                                 <div class="am-u-sm-9 am-u-end">
                                     <div class="am-form-file">
                                         <div class="am-form-file">
@@ -115,7 +133,7 @@
                                 </div>
                             </div>
 							 <div class="am-form-group">
-                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">环境图片 </label>
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">产品图片 </label>
                                 <div class="am-u-sm-9 am-u-end">
                                     <div class="am-form-file">
                                         <button type="button"
@@ -131,24 +149,24 @@
                                     </div>
                                 </div>
                             </div>
- <div class="am-form-group">
-                                <label class="am-u-sm-3 am-u-lg-2 am-form-label">店铺logo </label>
+                            <div class="am-form-group">
+                                <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">商家信息 </label>
                                 <div class="am-u-sm-9 am-u-end">
                                     <div class="am-form-file">
                                         <button type="button"
-                                                class="upload-file_logo am-btn am-btn-secondary am-radius">
+                                                class="upload-file3 am-btn am-btn-secondary am-radius">
                                             <i class="am-icon-cloud-upload"></i> 选择图片
                                         </button>
-                                        <div class="uploader-list am-cf">
-                                           
-                                               
+                                        <div class="uploader-list uploader-pic am-cf">
+
                                         </div>
                                     </div>
                                     <div class="help-block am-margin-top-sm">
-                                        <small>尺寸150x150像素以上，大小2M以下</small>
+                                        <small>主要用来展示营业执照之类</small>
                                     </div>
                                 </div>
                             </div>
+
                       <!--      <div class="widget-head am-cf">
                                 <div class="widget-title am-fl">规格/库存</div>
                             </div>
@@ -285,6 +303,11 @@
 		 // 选择环境图片
         $('.upload-file2').selectImages({
             name: 'shop[pictures][]'
+            , multiple: true
+        });
+        // 选择环境图片
+        $('.upload-file3').selectImages({
+            name: 'shop[shop_message][]'
             , multiple: true
         });
         // 选择logo
