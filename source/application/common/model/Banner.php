@@ -32,7 +32,7 @@ class Banner extends BaseModel
     }
     public function getDetail($id=0)
     {
-        $where['status']=1;
+       // $where['status']=1;
         $where['banner_id']=$id;
         return $this->where($where)
             ->with("uploadFile")

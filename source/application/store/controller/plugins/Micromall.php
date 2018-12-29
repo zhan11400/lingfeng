@@ -77,12 +77,14 @@ class Micromall extends Controller
         return $this->fetch('banner',compact("list"));
     }
     public function edit()
-    {    $model=new Banner();
+    {
+
+        $model=new Banner();
         if(request()->isPost()){
             $data=input("ad/a");
             $data['type']=1;//微商城轮播
             if($model->add($data)){
-                return $this->renderSuccess('操作成功',url('plugins.micromall/banner'));
+                return $this->renderSuccess('操作成功',url('plugins.micromall/ad'));
             }
             $error = $model->getError() ?: '操作失败';
             return $this->renderError($error);
@@ -90,7 +92,6 @@ class Micromall extends Controller
 
         $id=input("id");
         $info=$model->getDetail($id);
-        // var_dump($info);
         return $this->fetch('add',compact("info"));
     }
 

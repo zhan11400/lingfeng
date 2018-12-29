@@ -39,7 +39,7 @@
                                     <td class="am-text-middle"><?= $item['create_time'] ?></td>
                                     <td class="am-text-middle">
                                         <div class="tpl-table-black-operation">
-                                            <a href="<?= url('wxapp.page/add',
+                                            <a href="<?= url('plugins.micromall/edit',
                                                 ['id' => $item['banner_id']]) ?>">
                                                 <i class="am-icon-pencil"></i> 编辑
                                             </a>

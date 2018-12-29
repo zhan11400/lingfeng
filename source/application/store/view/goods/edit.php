@@ -17,6 +17,7 @@
                                            value="<?= $model['goods_name'] ?>" required>
                                 </div>
                             </div>
+                            <?php if($model['shop_id']==0){?>
                             <div class="am-form-group">
                                 <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">商品分类 </label>
                                 <div class="am-u-sm-9 am-u-end">
@@ -44,6 +45,7 @@
                                     </small>
                                 </div>
                             </div>
+                            <?php }?>
                             <div class="am-form-group">
                                 <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">商品图片 </label>
                                 <div class="am-u-sm-9 am-u-end">
@@ -226,6 +228,7 @@
                             <div class="widget-head am-cf">
                                 <div class="widget-title am-fl">其他</div>
                             </div>
+                            <?php if($model['shop_id']==0){?>
                             <div class="am-form-group">
                                 <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">运费模板 </label>
                                 <div class="am-u-sm-9 am-u-end">
@@ -244,6 +247,7 @@
                                     </small>
                                 </div>
                             </div>
+                            <?php }; ?>
                             <div class="am-form-group">
                                 <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">商品状态 </label>
                                 <div class="am-u-sm-9 am-u-end">
