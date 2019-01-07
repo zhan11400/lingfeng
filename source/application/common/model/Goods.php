@@ -48,7 +48,7 @@ class Goods extends BaseModel
      */
     public function spec()
     {
-        return $this->hasMany('GoodsSpec');
+        return $this->hasMany('GoodsSpec')->order("goods_price asc");
     }
 
     /**
@@ -216,7 +216,7 @@ class Goods extends BaseModel
         } elseif ($sortType === 'sales') {
             $sort = ['goods_sales' => 'desc'];
         } elseif ($sortType === 'price') {
-            $sort = $sortPrice ? ['goods_max_price' => 'desc'] : ['goods_min_price'];
+            $sort = $sortPrice=='true' ? ['goods_max_price' => 'desc'] : ['goods_min_price'];
         }
         // 商品表名称
         $tableName = $this->getTable();
@@ -224,7 +224,7 @@ class Goods extends BaseModel
         $GoodsSpec = new GoodsSpec;
         $minPriceSql = $GoodsSpec->field(['MIN(goods_price)'])
             ->where('goods_id', 'EXP', "= `$tableName`.`goods_id`")->buildSql();
-        $maxPriceSql = $GoodsSpec->field(['MAX(goods_price)'])
+        $maxPriceSql = $GoodsSpec->field(['MIN(goods_price)'])
             ->where('goods_id', 'EXP', "= `$tableName`.`goods_id`")->buildSql();
         // 执行查询
         $list = $this->field(['*', '(sales_initial + sales_actual) as goods_sales',

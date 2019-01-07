@@ -286,7 +286,7 @@ class Order extends OrderModel
      */
     public function receipt()
     {
-        var_dump($this['goods']);exit;
+     
         if ($this['delivery_status']['value'] == 10 || $this['receipt_status']['value'] == 20) {
             $this->error = '该订单不合法';
             return false;

@@ -13,7 +13,7 @@
                                 <div class="row am-cf">
                                     <div class="am-fl">地址：</div>
                                     <div class="am-fl">
-                                        <span class="x-color-green">pages/index/index</span>
+                                        <span class="x-color-green">../index/index</span>
                                     </div>
                                 </div>
                             </li>
@@ -22,7 +22,7 @@
                                 <div class="row am-cf">
                                     <div class="am-fl">地址：</div>
                                     <div class="am-fl">
-                                        <span class="x-color-green">pages/category/index</span>
+                                        <span class="x-color-green">../category/index</span>
                                     </div>
                                 </div>
                             </li>
@@ -31,7 +31,7 @@
                                 <div class="row am-cf">
                                     <div class="am-fl">地址：</div>
                                     <div class="am-fl">
-                                        <span class="x-color-green">pages/category/list</span>
+                                        <span class="x-color-green">../category/list</span>
                                     </div>
                                 </div>
                                 <div class="row am-cf">
@@ -41,13 +41,33 @@
                                             <span class="x-color-green">category_id</span>
                                             <span>商品分类ID</span>
                                             <span class="">　--选填</span>
-                                        </p>
+                                        </p>										
+                                        <p class="param">
+                                            <span class="x-color-green">type</span>
+                                            <span>商品属性 ( </span>
+                                            <span class="x-color-green">0</span>
+                                            <span>普通商品，</span>
+                                            <span class="x-color-green">1</span>
+                                            <span>促销，</span>
+                                            <span class="x-color-green">2</span>
+                                            <span>平远9.9，</span>
+                                            <span class="x-color-green">3</span>
+                                            <span>吃货区</span>
+                                            <span>)</span>
+                                            <span class="">　--选填</span>
+                                        </p>                                  
                                     </div>
                                 </div>
                                 <div class="row am-cf">
                                     <div class="am-fl">例如：</div>
                                     <div class="am-fl">
-                                        <span class="x-color-c-gray-5f">pages/category/list?category_id=10001</span>
+                                        <span class="x-color-c-gray-5f">../category/list?category_id=10001</span>
+                                    </div>
+                                </div>
+								<div class="row am-cf">
+                                    <div class="am-fl">例如：</div>                                  
+									<div class="am-fl">
+ 										<span class="x-color-c-gray-5f">../category/list?type=1</span>
                                     </div>
                                 </div>
                             </li>
@@ -56,7 +76,7 @@
                                 <div class="row am-cf">
                                     <div class="am-fl">地址：</div>
                                     <div class="am-fl">
-                                        <span class="x-color-green">pages/goods/index</span>
+                                        <span class="x-color-green">../goods/index</span>
                                     </div>
                                 </div>
                                 <div class="row am-cf">
@@ -72,7 +92,7 @@
                                 <div class="row am-cf">
                                     <div class="am-fl">例如：</div>
                                     <div class="am-fl">
-                                        <span class="x-color-c-gray-5f">pages/goods/index?goods_id=10001</span>
+                                        <span class="x-color-c-gray-5f">../goods/index?goods_id=10001</span>
                                     </div>
                                 </div>
                             </li>
@@ -81,7 +101,7 @@
                                 <div class="row am-cf">
                                     <div class="am-fl">地址：</div>
                                     <div class="am-fl">
-                                        <span class="x-color-green">pages/search/index</span>
+                                        <span class="x-color-green">../search/index</span>
                                     </div>
                                 </div>
                             </li>
@@ -90,7 +110,7 @@
                                 <div class="row am-cf">
                                     <div class="am-fl">地址：</div>
                                     <div class="am-fl">
-                                        <span class="x-color-green">pages/flow/index</span>
+                                        <span class="x-color-green">../flow/index</span>
                                     </div>
                                 </div>
                             </li>
@@ -99,7 +119,7 @@
                                 <div class="row am-cf">
                                     <div class="am-fl">地址：</div>
                                     <div class="am-fl">
-                                        <span class="x-color-green">pages/user/index</span>
+                                        <span class="x-color-green">../user/index</span>
                                     </div>
                                 </div>
                             </li>
@@ -108,7 +128,7 @@
                                 <div class="row am-cf">
                                     <div class="am-fl">地址：</div>
                                     <div class="am-fl">
-                                        <span class="x-color-green">pages/order/index</span>
+                                        <span class="x-color-green">../order/index</span>
                                     </div>
                                 </div>
                                 <div class="row am-cf">
@@ -133,7 +153,7 @@
                                 <div class="row am-cf">
                                     <div class="am-fl">例如：</div>
                                     <div class="am-fl">
-                                        <span class="x-color-c-gray-5f">pages/order/index?dataType=all</span>
+                                        <span class="x-color-c-gray-5f">../order/index?dataType=all</span>
                                     </div>
                                 </div>
                             </li>

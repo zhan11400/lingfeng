@@ -14,7 +14,7 @@
                                 <label class="am-u-sm-3 am-u-lg-2 am-form-label form-require">姓名 </label>
                                 <div class="am-u-sm-9 am-u-end">
                                     <input type="hidden" class="tpl-form-input" name="data[admin_id]"
-                                           value="<?= $model['shop_id'] ?>" required>
+                                           value="<?= $model['admin_id'] ?>" required>
                                     <input type="text" class="tpl-form-input" name="data[real_name]"
                                            value="<?= $model['real_name'] ?>" required>
                                 </div>

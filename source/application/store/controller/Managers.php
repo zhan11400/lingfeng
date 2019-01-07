@@ -54,9 +54,9 @@ class Managers extends Controller
      * @return array|mixed
      * @throws \think\exception\DbException
      */
-    public function edit($shop_id)
+    public function edit($shop_id,$admin_id)
     {
-        $model = $this->model->get($shop_id);
+        $model = $this->model->where(['shop_id'=>$shop_id,'admin_id'=>$admin_id])->find();
         if (!$this->request->isPost()) {
             return $this->fetch('edit', compact('model'));
         }
@@ -67,7 +67,7 @@ class Managers extends Controller
         return $this->renderError('操作失败');
     }
     /**
-     * 删除商品
+     * 删除管理员
      * @param $goods_id
      * @return array
      * @throws \think\exception\DbException
@@ -76,7 +76,7 @@ class Managers extends Controller
     {
         $info = $this->model->where(['admin_id'=>$id])->find();
         if(!$info){
-            return $this->renderSuccess('删除成功');
+            return $this->renderSuccess('系统繁忙');
         }
         if (!$this->model->remove($id)) {
             return $this->renderError('删除失败');

@@ -2,6 +2,7 @@
 
 namespace app\merchant\model;
 
+use think\Log;
 use think\Model;
 use think\Session;
 
@@ -66,22 +67,30 @@ class ShopManagers extends Model
      */
     public function renew($data)
     {
+
+        $user = self::useGlobalScope(false)
+            ->where([
+                'admin_id' => session('merchant_store.user')['store_user_id'],
+            ])->find();
+        if(md5($data['old_password'].$user['salt'])!=$user['password']){
+            $this->error = '原密码不正确';
+            return false;
+        }
         if ($data['password'] !== $data['password_confirm']) {
             $this->error = '确认密码不正确';
             return false;
         }
+        $salt=rand(1000,9999);
+        $password=md5($data['password'].$salt);
         // 更新管理员信息
         if ($this->save([
-                'user_name' => $data['user_name'],
-                'password' => yoshop_hash($data['password']),
+                'real_name' => $data['real_name'],
+                'salt'=>$salt,
+                'password' => $password,
             ]) === false) {
             return false;
         }
-        // 更新session
-        Session::set('yoshop_store.user', [
-            'store_user_id' => $this['store_user_id'],
-            'user_name' => $data['user_name'],
-        ]);
+        session("merchant_store",null);
         return true;
     }
 

@@ -38,7 +38,7 @@ class Index extends Controller
 
     public function getTestToken()
     {
-        $data['openid']='oj9Uh1W9fqP1IOE3p-7KrQCJxtL4';
+        $data['openid']='oVqpZ5F-Kddr-ouoFqjt5XzY-GXk';
         echo (new User())->SetTestToken($data);
     }
 
@@ -69,6 +69,9 @@ class Index extends Controller
 
     public function ad($type=0)
     {
+		if($type == 4){
+			return config('app_debug');
+		}
         $model=new Banner();
         $where['type']=$type;//0首页广告，1微商城轮播，2微商城四宫格
         $where['status']=1;

@@ -40,7 +40,7 @@
                 <ul>
                     <!-- 欢迎语 -->
                     <li class="am-text-sm tpl-header-navbar-welcome">
-                        <a href="<?= url('store.user/renew') ?>">欢迎你，<span><?= $store['user']['user_name'] ?></span>
+                        <a href="<?= url('Admin/renew') ?>">欢迎你，<span><?= $store['user']['user_name'] ?></span>
                         </a>
                     </li>
                     <!-- 退出 -->

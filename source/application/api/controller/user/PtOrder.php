@@ -5,7 +5,7 @@ namespace app\api\controller\user;
 use app\api\controller\Controller;
 use app\api\model\PtOrder as OrderModel;
 use app\api\model\Wxapp as WxappModel;
-use app\common\library\wechat\WxPay;
+use app\common\library\wechat\WxPay2;
 
 /**
  * 用户订单管理
@@ -106,7 +106,7 @@ class PtOrder extends Controller
         }
         // 发起微信支付
         $wxConfig = WxappModel::getWxappCache();
-        $WxPay = new WxPay($wxConfig);
+        $WxPay = new WxPay2($wxConfig);
         $wxParams = $WxPay->unifiedorder($order['order_no'], $this->user['open_id'], $order['pay_price']);
         return $this->renderSuccess($wxParams);
     }

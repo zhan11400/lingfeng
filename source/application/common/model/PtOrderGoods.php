@@ -36,7 +36,7 @@ class PtOrderGoods extends BaseModel
      */
     public function spec()
     {
-        return $this->belongsTo('GoodsSpec', 'spec_sku_id', 'spec_sku_id');
+        return $this->belongsTo('PtGoodsSpec', 'spec_sku_id', 'spec_sku_id');
     }
 
 }

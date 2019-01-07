@@ -3,7 +3,6 @@
 namespace app\common\model;
 
 use think\Hook;
-use think\Log;
 
 /**
  * 订单模型

@@ -107,6 +107,56 @@
                     </div>
 
                     <div class="widget-head am-cf">
+                        <div class="widget-title am-fl">拼团信息</div>
+                    </div>
+                    <div class="am-scrollable-horizontal">
+                        <table class="regional-table am-table am-table-bordered am-table-centered
+                            am-text-nowrap am-margin-bottom-xs">
+                            <tbody>
+                            <tr>
+                                <th>订单号</th>
+                                <th>实付款</th>
+                                <th>买家</th>
+                                <th>交易状态</th>
+                            </tr>
+                            <?php foreach ($detail['group'] as $order): ?>
+                            <tr>
+                                <td><?= $order['order_no']?></td>
+                                <td>
+                                    <p>￥<?= $order['pay_price'] ?></p>
+                                    <p class="am-link-muted">(含运费：￥<?= $detail['express_price'] ?>)</p>
+                                </td>
+                                <td>
+                                    <p><?= $order['nickName'] ?></p>
+                                    <div class="goods-image">
+                                        <img src="<?= $order['avatarUrl'] ?>" alt="">
+                                    </div>
+                                    <p class="am-link-muted">(用户id：<?= $order['user_id'] ?>)</p>
+                                </td>
+                                <td>
+                                    <p>付款状态：
+                                        <span class="am-badge
+                                        <?= $order['pay_status']['value'] === 20 ? 'am-badge-success' : '' ?>">
+                                                <?= $order['pay_status']['text'] ?></span>
+                                    </p>
+                                    <p>发货状态：
+                                        <span class="am-badge
+                                        <?= $order['delivery_status']['value'] === 20 ? 'am-badge-success' : '' ?>">
+                                                <?= $order['delivery_status']['text'] ?></span>
+                                    </p>
+                                    <p>收货状态：
+                                        <span class="am-badge
+                                        <?= $order['receipt_status']['value'] === 20 ? 'am-badge-success' : '' ?>">
+                                                <?= $order['receipt_status']['text'] ?></span>
+                                    </p>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="widget-head am-cf">
                         <div class="widget-title am-fl">商品信息</div>
                     </div>
                     <div class="am-scrollable-horizontal">

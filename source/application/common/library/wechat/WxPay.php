@@ -184,6 +184,7 @@ class WxPay
             'return_code' => $is_success ? $msg ?: 'SUCCESS' : 'FAIL',
             'return_msg' => $is_success ? 'OK' : $msg,
         ]);
+		Log::error($xml_post);
         die($xml_post);
     }
 

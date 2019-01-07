@@ -2,6 +2,7 @@
 
 namespace app\common\model;
 
+use think\Log;
 use think\Request;
 
 /**

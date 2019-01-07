@@ -5,7 +5,7 @@ namespace app\api\controller;
 use app\api\model\PtOrder as OrderModel;
 use app\api\model\Wxapp as WxappModel;
 use app\api\model\Cart as CartModel;
-use app\common\library\wechat\WxPay;
+use app\common\library\wechat\WxPay2;
 
 /**
  * 订单控制器
@@ -39,8 +39,9 @@ class PtOrder extends Controller
      * @throws \think\exception\DbException
      * @throws \Exception
      */
-    public function buyNow($goods_id, $goods_num, $goods_sku_id, $invite_info = 0)
+    public function buyNow($goods_id, $goods_num, $goods_sku_id, $invite_info = '0')
     {
+        $invite_info = empty($invite_info) ? '0' : $invite_info;
         // 商品结算信息
         $model = new OrderModel;
         $order = $model->getBuyNow($this->user, $goods_id, $goods_num, $goods_sku_id, $invite_info);
@@ -56,7 +57,7 @@ class PtOrder extends Controller
             return $this->renderSuccess([
                 'payment' => $this->wxPay($model['order_no'], $this->user['open_id']
                     , $order['order_pay_price']),
-                'order_id' => $model['order_id']
+                'order_id' => $model['pt_order_id']
             ]);
         }
         $error = $model->getError() ?: '订单创建失败';
@@ -109,7 +110,7 @@ class PtOrder extends Controller
     private function wxPay($order_no, $open_id, $pay_price)
     {
         $wxConfig = WxappModel::getWxappCache();
-        $WxPay = new WxPay($wxConfig);
+        $WxPay = new WxPay2($wxConfig);
         return $WxPay->unifiedorder($order_no, $open_id, $pay_price);
     }
 

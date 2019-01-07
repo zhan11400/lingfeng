@@ -5,6 +5,34 @@
                 <div class="widget-head am-cf">
                     <div class="widget-title am-cf"><?= $title ?></div>
                 </div>
+                <div class="am-u-sm-12 am-u-md-6 am-u-lg-6">
+                    <div class="am-form-group">
+                        <div class="am-btn-toolbar">
+                            <div class="am-btn-group am-btn-group-xs">
+                                <a class="am-btn am-btn-default am-btn-success am-radius"
+                                   href="<?= url('plugins.pt.order/delivery_list') ?>">
+                                    <span class=""></span> 待发货
+                                </a>
+                                <a class="am-btn am-btn-default am-btn-success am-radius"
+                                   href="<?= url('plugins.pt.order/receipt_list') ?>">
+                                    <span class="am-icon-plus"></span> 待收货
+                                </a>
+                                <a class="am-btn am-btn-default am-btn-success am-radius"
+                                   href="<?= url('plugins.pt.order/pay_list') ?>">
+                                    <span class="am-icon-plus"></span> 待付款
+                                </a>
+                                <a class="am-btn am-btn-default am-btn-success am-radius"
+                                   href="<?= url('plugins.pt.order/complete_list') ?>">
+                                    <span class="am-icon-plus"></span> 已完成
+                                </a>
+                                <a class="am-btn am-btn-default am-btn-success am-radius"
+                                   href="<?= url('plugins.pt.order/cancel_list') ?>">
+                                    <span class="am-icon-plus"></span> 已取消
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="widget-body am-fr">
                     <div class="order-list am-scrollable-horizontal am-u-sm-12 am-margin-top-xs">
                         <table width="100%" class="am-table am-table-centered

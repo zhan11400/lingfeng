@@ -50,7 +50,7 @@
                                     <td class="am-text-middle">
                                         <div class="tpl-table-black-operation">
                                             <a href="<?= url('managers/edit',
-                                                ['shop_id' => $item['shop_id']]) ?>">
+                                                ['shop_id' => $item['shop_id'],'admin_id' => $item['admin_id']]) ?>">
                                                 <i class="am-icon-pencil"></i> 编辑
                                             </a>
                                             <a href="javascript:;" class="item-delete tpl-table-black-operation-del"

@@ -38,15 +38,22 @@ class PtOrder extends OrderModel
         // 商品信息
         /* @var Goods $goods */
         $goods = PtGoods::detail($goods_id);
-        //todo 考虑正在成团状态,不能重复参团,自身不能参团
+        //考虑正在成团状态,不能重复参团,自身不能参团
         if ($invite_info) {
             $order = self::getUserOrderDetail($invite_info, 'invite');
             if (!$order) {
                 $this->seterror('该拼团未成团或已失效');
             } else if (!empty($order['parent_id'])) {
                 $this->seterror('拼团子订单不能开团');
+            } /*else if ($user['user_id'] == $order['user_id']) {
+                $this->setError('不能参加自己开的团');
+            }*/
+
+            if ($goods['pt_goods_id'] != $order['goods'][0]['pt_goods_id']) {
+                $this->seterror('参团商品异常');
             }
         }
+
         // 判断商品是否下架
         if ($goods['goods_status']['value'] !== 10) {
             $this->setError('很抱歉，商品信息不存在或已下架');
@@ -60,7 +67,7 @@ class PtOrder extends OrderModel
         if ($goods_num > $goods['goods_sku']['limit_num'] && $goods['goods_sku']['limit_num'] > 0) {
             $this->setError('很抱歉，该商品最大购买数量为' . $goods['goods_sku']['limit_num']);
         }
-        $this->setError('');				
+        $this->setError('');
         // 商品单价
         $goods['goods_price'] = $goods['goods_sku']['goods_price'];
         // 商品总价
@@ -85,7 +92,7 @@ class PtOrder extends OrderModel
             'order_total_price' => $totalPrice,    // 商品总金额 (不含运费)
             'order_pay_price' => bcadd($totalPrice, $expressPrice, 2),  // 实际支付金额
             'pt_limit_num' => $goods['pt_limit_num'], //成团人数
-            'pt_limit_time' => strtotime("+{$goods['pt_validhours']} hours"),//成团截止时间
+            'pt_limit_time' => $invite_info ? 0 : strtotime("+{$goods['pt_validhours']} hours"),//成团截止时间
             'address' => $user['address_default'],  // 默认地址
             'exist_address' => $exist_address,  // 是否存在收货地址
             'express_price' => $expressPrice,    // 配送费用
@@ -171,7 +178,7 @@ class PtOrder extends OrderModel
         // 保存订单商品信息
         $this->goods()->saveAll($goodsList);
         // 更新商品库存
-        !empty($deductStockData) && (new GoodsSpec)->isUpdate()->saveAll($deductStockData);
+        !empty($deductStockData) && (new PtGoodsSpec)->isUpdate()->saveAll($deductStockData);
         // 记录收货地址
         $this->address()->save([
             'user_id' => $user_id,
@@ -345,9 +352,10 @@ class PtOrder extends OrderModel
         $pid = empty($order['parent_id']) ? $order['order_no'] : $order['parent_id'];
 
 
-        if (!$order['group'] = (new OrderModel())->where('order_no|parent_id', $pid)->where('pt_status','>',20)->select()) {
+        if (!$order['group'] = (new OrderModel())->where('order_no|parent_id', $pid)->where('pt_status', '>', 20)->select()) {
             throw new BaseException(['msg' => '无法找到团信息']);
         }
+        //获取团员信息
         foreach ($order['group'] as $i => $v) {
             $user = (new User())->where('user_id', $v['user_id'])->field('avatarUrl,nickName,user_id')->find()->getData();
             $order['group'][$i]['avatarUrl'] = $user['avatarUrl'];
