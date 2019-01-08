@@ -132,6 +132,22 @@ class User extends UserModel
         return $user['user_id'];
     }
 
+    public function wxopen($openid,$template_id,$form_id)
+    {
 
+        // 获取当前小程序信息
+        $wxapp = Wxapp::detail();
+        if (empty($wxapp['app_id']) || empty($wxapp['app_secret'])) {
+            throw new BaseException(['msg' => '请到 [后台-小程序设置] 填写appid 和 appsecret']);
+        }
+        // 发送小程序模板
+        $WxUser = new WxUser($wxapp['app_id'], $wxapp['app_secret']);
+        $access_token=$WxUser->getAccessToken();
+        var_dump($access_token);
+        if (!$session = $WxUser->sendTemplate($openid,$template_id,$access_token['access_token'],$form_id)) {
+            throw new BaseException(['msg' => $WxUser->getError()]);
+        }
+        return $session;
+    }
 
 }

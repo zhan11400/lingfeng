@@ -229,6 +229,14 @@ return [
                     [
                         'name' => '四宫格',
                         'index' => 'plugins.micromall/banner',
+                    ],
+                    [
+                        'name' => '广告图',
+                        'index' => 'plugins.micromall/pic',
+                    ],
+                    [
+                        'name' => '文章',
+                        'index' => 'plugins.micromall/article',
                     ]
                 ]
             ]

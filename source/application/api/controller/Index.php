@@ -7,6 +7,7 @@ use app\api\model\UserApply;
 use app\api\model\WxappPage;
 use app\api\model\Goods as GoodsModel;
 use app\api\validate\BaseValidate;
+use app\common\model\Article;
 use app\common\model\Banner;
 use think\Cache;
 use think\Validate;
@@ -76,6 +77,15 @@ class Index extends Controller
         $where['type']=$type;//0首页广告，1微商城轮播，2微商城四宫格
         $where['status']=1;
         $list=$model->getList($where);
+        return $this->renderSuccess(compact('list'));
+    }
+
+    //首页广告点击进去查看的文章
+
+    public function article($id=1)
+    {
+        $model=new Article();
+        $list=$model->getDetail($id);
         return $this->renderSuccess(compact('list'));
     }
 }

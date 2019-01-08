@@ -61,6 +61,9 @@ class WxPay
         $url = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
         $result = $this->postXmlCurl($this->toXml($params), $url);
         $prepay = $this->fromXml($result);
+        // 记录日志
+        $this->doLogs($result);
+        $this->doLogs($prepay);
         // 请求失败
         if ($prepay['return_code'] === 'FAIL') {
             throw new BaseException(['msg' => $prepay['return_msg'], 'code' => -10]);

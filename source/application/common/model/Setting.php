@@ -83,7 +83,7 @@ class Setting extends BaseModel
             'store' => [
                 'key' => 'store',
                 'describe' => '商城设置',
-                'values' => ['name' => '萤火小程序商城'],
+                'values' => ['name' => '平远圈'],
             ],
             'trade' => [
                 'key' => 'trade',
@@ -121,7 +121,7 @@ class Setting extends BaseModel
                         'aliyun' => [
                             'AccessKeyId' => '',
                             'AccessKeySecret' => '',
-                            'sign' => '萤火科技',
+                            'sign' => '科技',
                             'order_pay' => [
                                 'is_enable' => '0',
                                 'template_code' => '',

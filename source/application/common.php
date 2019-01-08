@@ -94,7 +94,25 @@ function curl($url, $data = [])
     curl_close($curl);
     return $result;
 }
+/**
+ * curl请求指定url
+ * @param $url
+ * @param string $data
+ * @return mixed
+ */
+function postCurl($url, $data)
+{
 
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_HEADER, false);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+    $response=curl_exec($curl);
+    return $response;
+}
 if (!function_exists('array_column')) {
     /**
      * array_column 兼容低版本php

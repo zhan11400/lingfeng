@@ -10,50 +10,36 @@ use think\Db;
  * Class Category
  * @package app\common\model
  */
-class Banner extends BaseModel
+class Article extends BaseModel
 {
-    protected $name = 'banner';
+    protected $name = 'article';
 
     public function getList($where=[])
     {
         return $this->where($where)
-            ->with("uploadFile")
-            ->order("sort desc")->paginate(20);
+            ->paginate(20);
     }
 
-    /**
-     * 关联图片表
-     * @return \think\model\relation\HasMany
-     */
-    public function uploadFile()
-    {
-        return $this->belongsTo('uploadFile','image','file_id');
-    }
     public function getDetail($id=0)
     {
        // $where['status']=1;
-        $where['banner_id']=$id;
+        $where['article_id']=$id;
         return $this->where($where)
-            ->with("uploadFile")
             ->find();
     }
     /**
-     * 添加店铺
+     * 修改文章
      * @param array $data
      * @return bool
      */
     public function add(array $data)
     {
-        if (!isset($data['image']) || empty($data['image'])) {
-            $this->error = '请上传广告图片';
-            return false;
-        }
         $data['wxapp_id']=self::$wxapp_id;
         // 开启事务
         Db::startTrans();
         try {
-            if(isset($data['banner_id']) && !empty($data['banner_id'])){
-                $this->where(['banner_id'=>$data['banner_id']])->update($data);
+            if(isset($data['article_id']) && !empty($data['article_id'])){
+                $this->where(['article_id'=>$data['article_id']])->update($data);
             }else {
                 // 添加店铺
                 $this->allowField(true)->save($data);
