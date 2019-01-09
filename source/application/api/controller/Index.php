@@ -39,7 +39,7 @@ class Index extends Controller
 
     public function getTestToken()
     {
-        $data['openid']='oVqpZ5F-Kddr-ouoFqjt5XzY-GXk';
+        $data['openid']='oVqpZ5NCx6XELqx2CEdPQbrcrmEw';
         echo (new User())->SetTestToken($data);
     }
 

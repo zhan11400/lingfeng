@@ -64,6 +64,10 @@ return [
                     'goods.category/add',
                     'goods.category/edit',
                 ],
+            ],
+            [
+                'name' => '商品评价',
+                'index' => 'goods.comment/index',
             ]
         ],
     ],

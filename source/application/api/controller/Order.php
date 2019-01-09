@@ -53,6 +53,8 @@ class Order extends Controller
         //var_dump($order);exit;
         // 创建订单
         if ($model->add($this->user['user_id'], $order)) {
+            $order_id = $model['order_id'];
+            $model->add_order_shop_id($order_id,$order['shop_id']);
             // 发起微信支付
             return $this->renderSuccess([
                 'payment' => $this->wxPay($model['order_no'], $this->user['open_id']

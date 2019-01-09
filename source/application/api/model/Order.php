@@ -74,6 +74,7 @@ class Order extends OrderModel
             $goods['delivery']->calcTotalFee($goods_num, $goods_total_weight, $cityId) : 0;
         return [
             'goods_list' => [$goods],               // 商品详情
+            'shop_id' => $goods['shop_id'],
             'order_total_num' => $goods_num,        // 商品总数量
             'order_total_price' => $totalPrice,    // 商品总金额 (不含运费)
             'order_pay_price' => bcadd($totalPrice, $expressPrice, 2),  // 实际支付金额
@@ -232,6 +233,12 @@ class Order extends OrderModel
                 $filter['pay_status'] = 20;
                 $filter['delivery_status'] = 20;
                 $filter['receipt_status'] = 10;
+                break;
+            case 'comment';
+                $filter['pay_status'] = 20;
+                $filter['delivery_status'] = 20;
+                $filter['receipt_status'] = 20;
+                $filter['is_comment'] = 0;
                 break;
         }
         return $this->with(['goods.image'])
@@ -397,6 +404,19 @@ class Order extends OrderModel
     public function hasError()
     {
         return !empty($this->error);
+    }
+
+    /**
+     * 修改订单评论状态
+     * @param $user_id
+     * @param string $type
+     * @return int|string
+     */
+    public function setComment()
+    {
+        return $this->save([
+            'is_comment' => 1,
+        ]);
     }
 
 }

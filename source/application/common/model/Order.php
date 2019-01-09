@@ -68,7 +68,16 @@ class Order extends BaseModel
         $status = [10 => '待付款', 20 => '已付款'];
         return ['text' => $status[$value], 'value' => $value];
     }
-
+    /**
+     * 评论状态
+     * @param $value
+     * @return array
+     */
+    public function getIsCommentAttr($value)
+    {
+        $status = [0 => '待评论', 1 => '已评论'];
+        return ['text' => $status[$value], 'value' => $value];
+    }
     /**
      * 发货状态
      * @param $value

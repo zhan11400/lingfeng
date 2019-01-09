@@ -6,6 +6,8 @@ use app\api\controller\Controller;
 use app\api\model\Order as OrderModel;
 use app\api\model\Wxapp as WxappModel;
 use app\common\library\wechat\WxPay;
+use app\common\model\GoodsComment;
+use app\api\model\UploadFile;
 use think\Db;
 
 /**
@@ -118,5 +120,84 @@ class Order extends Controller
         $wxParams = $WxPay->unifiedorder($order['order_no'], $this->user['open_id'], $order['pay_price']);
         return $this->renderSuccess($wxParams);
     }
+    /**
+     * 订单评论
+     * @param $order_id
+     * @return array
+     * @throws \app\common\exception\BaseException
+     * @throws \think\exception\DbException
+     */
+    public function comment()
+    {
+        $order_id=input("order_id/d");
+        $filter= OrderModel::getUserOrderDetail($order_id, $this->user['user_id']);
+      //  if($filter['pay_status']['value']==20 && $filter['pay_status']['value']==20 && $filter['receipt_status']['value']==20 && $filter['is_comment']==0){
 
+            $model=new GoodsComment();
+            Db::startTrans();
+            //  var_dump(input());
+
+            if ($model->addComment($this->postData('data'),$filter)) {
+                //修改订单是否已评论状态
+                $filter->setComment();
+                Db::commit();
+                return $this->renderSuccess('提交评论成功');
+            }
+            $error=$model->getError();
+            Db::rollback();
+     //   }else{
+     //       $error='不是待评论状态';
+      //  }
+        return $this->renderError($error);
+    }
+
+    public function upload(){
+        // 获取表单上传文件 例如上传了001.jpg
+        $file = request()->file('image');
+         // 移动到框架应用根目录/public/uploads/ 目录下
+        if($file){
+            $info = $file
+                ->validate(['size'=>15678,'ext'=>'jpg,png,gif'])
+                ->move(dirname(ROOT_PATH) . 'web' . DS . 'uploads');
+            if($info){
+                $fileType= $info->getExtension();
+                $fileName= $info->getFilename();
+                $fileSize= $info->getSize();
+                $uploadFile= $this->addUploadFile(0,$fileName, $fileSize, $fileType);
+                // 图片上传成功
+                return json(['code' => 1, 'msg' => '图片上传成功', 'data' => $uploadFile]);
+            }else{
+                return $this->renderError($file->getError());
+            }
+        }
+    }
+
+    /**
+     * 添加文件库上传记录
+     * @param $group_id
+     * @param $fileName
+     * @param $fileInfo
+     * @param $fileType
+     * @return UploadFile
+     */
+    private function addUploadFile($group_id, $fileName, $fileSize, $fileType)
+    {
+        // 存储引擎
+        $storage ='local';
+        // 存储域名
+        $fileUrl ='';
+        // 添加文件库记录
+        $model = new UploadFile();
+        $model->add([
+            'group_id' => $group_id > 0 ? (int)$group_id : 0,
+            'storage' => $storage,
+            'file_url' => $fileUrl,
+            'file_name' => $fileName,
+            'file_size' =>$fileSize,
+            'file_type' => 'image',
+            'extension' => pathinfo($fileType, PATHINFO_EXTENSION),
+            'shop_id'=>0
+        ]);
+        return $model;
+    }
 }

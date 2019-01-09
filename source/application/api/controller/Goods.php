@@ -6,6 +6,7 @@ use app\api\model\Goods as GoodsModel;
 use app\api\model\Cart as CartModel;
 use app\api\model\Shop;
 use app\api\model\UserFavoriteGoods;
+use app\common\model\GoodsComment;
 
 /**
  * 商品控制器
@@ -60,6 +61,25 @@ class Goods extends Controller
             $detail['is_collect']=$is_collect['status'];
         }
         return $this->renderSuccess(compact('detail', 'cart_total_num', 'specData','shop'));
+    }
+    /**
+     * 获取商品的评论列表
+     * @param $goods_id
+     * @return array
+     * @throws \think\exception\DbException
+     */
+    public function comment($goods_id)
+    {
+        $user=$this->getUser();
+        // 商品详情
+        $detail = GoodsModel::detail($goods_id);
+        if (!$detail || $detail['goods_status']['value'] != 10) {
+            return $this->renderError('很抱歉，商品信息不存在或已下架');
+        }
+        $sortType=input('sortType');
+        $model=new GoodsComment();
+        $list=$model->getGoodsCommentList($goods_id,$sortType);
+        return $this->renderSuccess(compact('list'));
     }
     /**
      * 收藏商品与取消收藏
