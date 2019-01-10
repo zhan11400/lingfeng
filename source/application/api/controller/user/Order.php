@@ -127,15 +127,13 @@ class Order extends Controller
      * @throws \app\common\exception\BaseException
      * @throws \think\exception\DbException
      */
-    public function comment()
-    {
+    public function comment(){
         $order_id=input("order_id/d");
         $filter= OrderModel::getUserOrderDetail($order_id, $this->user['user_id']);
-      //  if($filter['pay_status']['value']==20 && $filter['pay_status']['value']==20 && $filter['receipt_status']['value']==20 && $filter['is_comment']==0){
+        if($filter['pay_status']['value']==20 && $filter['pay_status']['value']==20 && $filter['receipt_status']['value']==20 && $filter['is_comment']==0){
 
             $model=new GoodsComment();
             Db::startTrans();
-            //  var_dump(input());
 
             if ($model->addComment($this->postData('data'),$filter)) {
                 //修改订单是否已评论状态
@@ -145,9 +143,9 @@ class Order extends Controller
             }
             $error=$model->getError();
             Db::rollback();
-     //   }else{
-     //       $error='不是待评论状态';
-      //  }
+        }else{
+            $error='不是待评论状态';
+        }
         return $this->renderError($error);
     }
 

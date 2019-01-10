@@ -21,6 +21,10 @@ class GoodsComment extends BaseModel
      */
     public function addComment($data,$order)
     {
+        if(is_array($data)){
+            $data=json_decode(htmlspecialchars_decode($data[0]),true);
+        }
+
         $list=[];
         foreach($data as $k=>$v){
             $insert['user_id']=$order['user_id'];
