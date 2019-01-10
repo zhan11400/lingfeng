@@ -88,4 +88,14 @@ class Index extends Controller
         $list=$model->getDetail($id);
         return $this->renderSuccess(compact('list'));
     }
+
+    //首页公告
+    public function getNotice(){
+        $notice =  \app\common\model\Setting::detail('store');
+        $notice = json_decode($notice,true);
+        if($notice['values']['is_notice']){
+            return $this->renderSuccess($notice['values']['notice']);
+        }
+        return null;
+    }
 }

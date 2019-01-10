@@ -157,17 +157,24 @@ class Order extends Controller
          // 移动到框架应用根目录/public/uploads/ 目录下
         if($file){
             $info = $file
-                ->validate(['size'=>15678,'ext'=>'jpg,png,gif'])
+                ->validate(['size'=>307200,'ext'=>'jpg,png,gif,jpeg'])
                 ->move(dirname(ROOT_PATH) . 'web' . DS . 'uploads');
             if($info){
                 $fileType= $info->getExtension();
-                $fileName= $info->getFilename();
+                $fileName= str_replace("\\",'/',$info->getSavename());
                 $fileSize= $info->getSize();
                 $uploadFile= $this->addUploadFile(0,$fileName, $fileSize, $fileType);
-                // 图片上传成功
-                return json(['code' => 1, 'msg' => '图片上传成功', 'data' => $uploadFile]);
+                // 图片上传成功 图片上传失败
+                return $this->renderSuccess($uploadFile,'图片上传成功');
             }else{
-                return $this->renderError($file->getError());
+                $message=$file->getError();
+                if($file->getError()=='上传文件大小不符！'){
+                    $message='请上传小于300K的图片';
+                }
+                if($file->getError()=='上传文件后缀不允许'){
+                    $message='请上传jpg,png,gif,jpeg格式的图片';
+                }
+                return $this->renderError($message);
             }
         }
     }

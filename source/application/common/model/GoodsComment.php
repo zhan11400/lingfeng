@@ -80,6 +80,12 @@ class GoodsComment extends BaseModel
            });
         return $list;
     }
+
+    /**
+     * 商品列表，后台用的
+     * @param int $shop_id
+     * @return $this
+     */
     public function getCommentList($shop_id=0)
     {
         $where=[];
@@ -101,6 +107,8 @@ class GoodsComment extends BaseModel
                     $shop_message[$k]['file_path'] =IMG_PATH.$files[$v];
                     $shop_message[$k]['image_id'] =$v;
                 }
+                $status = [0 => '待审核', 1 => '已通过', -1 => '不通过'];
+                $item['status_str']=$status[$item['status' ]];
                 $item['images']=$shop_message;
                 return $item;
             });
@@ -113,5 +121,15 @@ class GoodsComment extends BaseModel
     public function goods()
     {
         return  $this->belongsTo("Goods",'goods_id','goods_id');
+    }
+
+    public function getDetail($id)
+    {
+        return self::get($id);
+    }
+    public function updateStatus($status)
+    {
+        $res=$this->allowField(true)->save(['status'=>$status]);
+        return $res;
     }
 }

@@ -28,6 +28,7 @@
                                 <th>评论者</th>
                                 <th>商品信息</th>
                                 <th>评论时间</th>
+                                <th>状态</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
@@ -46,16 +47,19 @@
                                             <?= $first['goods']['goods_name'] ?>
                                         </a></td>
                                     <td class="am-text-middle"><?= $first['create_time'] ?></td>
+                                    <td class="am-text-middle"><?= $first['status_str'] ?></td>
                                     <td class="am-text-middle">
                                         <div class="tpl-table-black-operation">
-                                            <a class="am-check" data-url="<?= url('goods.comment/edit', ['id' => $first['id']]) ?>" data-status="1"
+                                            <?php if ($first['status']==0): ?>
+                                            <a class="am-check" data-url="<?= url('goods.comment/check', ['id' => $first['id']]) ?>" data-status="1"
                                                data-id="<?= $first['id'] ?>">
                                                 <i class="am-icon-pencil"></i> 通过
                                             </a>
-                                            <a class="am-check" data-url="<?= url('goods.comment/edit',
+                                            <a class="am-check" data-url="<?= url('goods.comment/check',
                                                 ['id' => $first['id']]) ?>" data-status="-1"  data-id="<?= $first['id'] ?>">
                                                 <i class="am-icon-pencil"></i> 不通过
                                             </a>
+                                            <?php endif; ?>
                                             <a href="javascript:;" class="item-delete tpl-table-black-operation-del"
                                                data-id="<?= $first['id'] ?>">
                                                 <i class="am-icon-trash"></i> 删除
@@ -90,10 +94,17 @@
 
 
         $(".am-check").click(function () {
+           var status= $(this).data('status');
+            var id=$(this).data('id')
+            var text=$(this).text();
+            var url=$(this).data('url');
+            layer.confirm('确定操作'+text+'吗？', {
+                btn: ['确定', '取消']
+            }, function () {
             $.ajax({
                 type :"post",
                 url : url,
-                data : {'id':$(this).data('status'),'status':$(this).data('status')},
+                data : {'id':id,'status':status},
                 dataType : "json",
                 success : function(data) {
                     layer.msg(data.msg)
@@ -105,6 +116,7 @@
                     layer.alert(err.info,8);
                 }
             });
+        })
         })
     });
 </script>
