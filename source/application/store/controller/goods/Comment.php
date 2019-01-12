@@ -42,6 +42,20 @@ class Comment extends Controller
         }
         return $this->renderError('审核失败');
     }
-
+    /**
+     * 删除商品
+     * @param $goods_id
+     * @return array
+     * @throws \think\exception\DbException
+     */
+    public function delete($id)
+    {
+        $model = new GoodsComment();
+        $info = $model->getDetail($id);
+        if (!$info->remove()) {
+            return $this->renderError('删除失败');
+        }
+        return $this->renderSuccess('删除成功');
+    }
 
 }

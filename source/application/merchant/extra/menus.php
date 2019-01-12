@@ -84,10 +84,10 @@ return [
                 'name' => '钱包记录',
                 'index' => 'finance/index',
             ],
-            [
+        /*    [
                 'name' => '我的余额',
                 'index' => 'finance/balance',
-            ],
+            ],*/
             [
                 'name' => '提现记录',
                 'index' => 'finance/apply_log',

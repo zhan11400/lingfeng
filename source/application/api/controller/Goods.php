@@ -79,7 +79,9 @@ class Goods extends Controller
         $sortType=input('sortType');
         $model=new GoodsComment();
         $list=$model->getGoodsCommentList($goods_id,$sortType);
-        return $this->renderSuccess(compact('list'));
+        $pic_count=$model->getGoodsCommentCount($goods_id,'pic');
+        $nopic_count=$model->getGoodsCommentCount($goods_id,'nopic');
+        return $this->renderSuccess(compact('list','pic_count','nopic_count'));
     }
     /**
      * 收藏商品与取消收藏

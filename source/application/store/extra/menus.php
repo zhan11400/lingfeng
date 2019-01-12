@@ -273,6 +273,10 @@ return [
                 'index' => 'setting/sms'
             ],
             [
+                'name' => '公众号通知',
+                'index' => 'setting/mp'
+            ],
+            [
                 'name' => '上传设置',
                 'index' => 'setting/storage',
             ],

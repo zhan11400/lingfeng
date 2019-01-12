@@ -130,7 +130,8 @@ class Order extends Controller
     public function comment(){
         $order_id=input("order_id/d");
         $filter= OrderModel::getUserOrderDetail($order_id, $this->user['user_id']);
-        if($filter['pay_status']['value']==20 && $filter['pay_status']['value']==20 && $filter['receipt_status']['value']==20 && $filter['is_comment']==0){
+
+        if($filter['pay_status']['value']==20 && $filter['pay_status']['value']==20 && $filter['receipt_status']['value']==20 && $filter['is_comment']['value']==0){
 
             $model=new GoodsComment();
             Db::startTrans();
@@ -156,14 +157,15 @@ class Order extends Controller
         if($file){
             $info = $file
                 ->validate(['size'=>307200,'ext'=>'jpg,png,gif,jpeg'])
-                ->move(dirname(ROOT_PATH) . 'web' . DS . 'uploads');
+                ->move(dirname(ROOT_PATH). DS . 'web' . DS . 'uploads');
             if($info){
                 $fileType= $info->getExtension();
                 $fileName= str_replace("\\",'/',$info->getSavename());
                 $fileSize= $info->getSize();
                 $uploadFile= $this->addUploadFile(0,$fileName, $fileSize, $fileType);
-                // 图片上传成功 图片上传失败
-                return $this->renderSuccess($uploadFile,'图片上传成功');
+       
+                 // 图片上传成功
+               return $this->renderSuccess($uploadFile,'图片上传成功');
             }else{
                 $message=$file->getError();
                 if($file->getError()=='上传文件大小不符！'){
@@ -200,7 +202,7 @@ class Order extends Controller
             'file_name' => $fileName,
             'file_size' =>$fileSize,
             'file_type' => 'image',
-            'extension' => pathinfo($fileType, PATHINFO_EXTENSION),
+            'extension' => $fileType,
             'shop_id'=>0
         ]);
         return $model;

@@ -34,6 +34,7 @@ class GoodsComment extends BaseModel
             $insert['des_star']=$v['des_star'];
             $insert['express_star']=$v['express_star'];
             $insert['service_star']=$v['service_star'];
+            $insert['spec']=$v['spec'];
             if(isset($v['images']) && count($v['images'])>0){
                 $insert['type']=1;
                 $insert['images']=serialize($v['images']);
@@ -83,6 +84,18 @@ class GoodsComment extends BaseModel
                return $item;
            });
         return $list;
+    }
+
+    public function getGoodsCommentCount($goods_id,$Type='all')
+    {
+        if($Type=='pic'){
+            $where['type']=1;
+        }elseif($Type=='nopic'){
+            $where['type']=0;
+        }
+        $where['goods_id']=$goods_id;
+        $where['status']=1;
+        return  $this->where($where)->count();
     }
 
     /**
@@ -135,5 +148,9 @@ class GoodsComment extends BaseModel
     {
         $res=$this->allowField(true)->save(['status'=>$status]);
         return $res;
+    }
+    public function remove()
+    {
+      return  $this->delete();
     }
 }
